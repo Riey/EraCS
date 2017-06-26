@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EraCS.UI.MainPage">
+    <ContentPage.Content>
+        <Grid x:Name="ConsoleGrid" BackgroundColor="{Binding ConsoleBackColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0"/>
+            <Editor Grid.Row="1" x:Name="ConsoleEditor" BackgroundColor="{Binding ConsoleBackColor}" TextColor="{Binding ConsoleTextColor}"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F044D821-C9E9-4DF7-9B37-DFE2BE4DD711}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>EraCS</RootNamespace>
+    <AssemblyName>EraCS.Core</AssemblyName>
+    <DefaultLanguage>ko-KR</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <PackageReference Include="Riey.Common.Config">
+      <Version>1.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>2.3.4.247</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Console\ConsoleViewFactory.cs" />
+    <Compile Include="Console\EraConsole.cs" />
+    <Compile Include="Console\InputRequest.cs" />
+    <Compile Include="EraConfig.cs" />
+    <Compile Include="EraProgram.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Variable\ArrayVariable.cs" />
+    <Compile Include="Variable\FunctionVariable.cs" />
+    <Compile Include="Variable\ISerializable.cs" />
+    <Compile Include="Variable\IVariable.cs" />
+    <Compile Include="Variable\Serializer\IntegerSerializer.cs" />
+    <Compile Include="Variable\Serializer\ISerializer.cs" />
+    <Compile Include="Variable\Serializer\Serializer.cs" />
+    <Compile Include="Variable\Serializer\StringSerializer.cs" />
+    <Compile Include="Variable\Variable.cs" />
+    <Compile Include="Variable\VariableDataBase.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetDir)$(TargetName)$(TargetExt) $(SolutionDir)Binary\$(ConfigurationName)\
+copy $(TargetDir)$(TargetName).pdb $(SolutionDir)Binary\$(ConfigurationName)\</PostBuildEvent>
+  </PropertyGroup>
+</Project>
