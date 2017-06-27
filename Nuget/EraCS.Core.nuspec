@@ -6,8 +6,8 @@
     <title>Riey.EraCS.Core</title>
     <authors>Riey</authors>
     <owners>Riey</owners>
-    <licenseUrl>http://github.com/Riey/EraCS</licenseUrl>
-    <projectUrl>http://github.com/Riey/EraCS/LICENSE</projectUrl>
+    <licenseUrl>http://github.com/Riey/EraCS/LICENSE</licenseUrl>
+    <projectUrl>http://github.com/Riey/EraCS</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Era runtime with C#</description>
     <copyright>Copyright 2017</copyright>
