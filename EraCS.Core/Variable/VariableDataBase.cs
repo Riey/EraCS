@@ -25,13 +25,22 @@ namespace EraCS.Variable
 
         public IVariable<int> Result { get; } = new ArrayVariable<int>(nameof(Result), false, 1000, Serializer.IntegerSerializer.Instance);
         public IVariable<string> ResultS { get; } = new ArrayVariable<string>(nameof(ResultS), false, 1000, Serializer.StringSerializer.Instance);
-        
+
+        protected virtual void Save(BinaryWriter writer)
+        {
+        }
+
         public void Save(Stream output, bool leaveOpen)
         {
             using (var writer = new BinaryWriter(output, Encoding.UTF8, leaveOpen))
             {
                 Serialize(writer);
+                Save(writer);
             }
+        }
+
+        protected virtual void Load(BinaryReader reader)
+        {
         }
 
         public void Load(Stream input, bool leaveOpen)
@@ -44,7 +53,10 @@ namespace EraCS.Variable
 
         public void Serialize(BinaryWriter writer)
         {
-            foreach (var var in SavableVariables)
+            var savableVariables = SavableVariables.ToArray();
+            writer.Write(savableVariables.Length);
+
+            foreach (var var in savableVariables)
             {
                 writer.Write(var.Name);
                 var.Serialize(writer);
@@ -53,9 +65,10 @@ namespace EraCS.Variable
 
         public void DeSerialize(BinaryReader reader)
         {
+            var count = reader.ReadInt32();
             var varDic = SavableVariables.ToDictionary(var => var.Name);
 
-            while(reader.PeekChar() != -1)
+            for (int i = 0; i < count; i++)
             {
                 if (varDic.TryGetValue(reader.ReadString(), out var var))
                     var.DeSerialize(reader);

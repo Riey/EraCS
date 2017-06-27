@@ -11,7 +11,7 @@ namespace EraCS.Variable
     {
         private readonly Func<int, T> _valueFactory;
 
-        public FunctionVariable(string name, int size, ISerializer<T> serializer, Func<int, T> valueFactory) : base(name, false, size, serializer)
+        public FunctionVariable(string name, int size, Func<int, T> valueFactory) : base(name, false, size, null)
         {
             _valueFactory = valueFactory;
         }
