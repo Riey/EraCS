@@ -11,9 +11,14 @@ namespace EraCS.Core.Test.Program
         {
         }
 
-        protected override void RunScript()
+        protected override async void RunScriptAsync()
         {
-            Call("SYSTEM_TITLE");
+            Call("SystemTitle");
+            var input = await WaitAsync(new InputRequest(InputType.STR));
+
+            Console.NewLine();
+            Console.NewLine();
+            Console.PrintLine($"You wrote: {input}");
         }
     }
 }

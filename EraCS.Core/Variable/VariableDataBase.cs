@@ -11,20 +11,13 @@ namespace EraCS.Variable
     public abstract class VariableDataBase : ISerializable
     {
         protected virtual IEnumerable<IVariable> SavableVariables
-        {
-            get
-            {
-                return
-                    from property in this.GetType().GetRuntimeProperties()
-                    where typeof(IVariable).GetTypeInfo().IsAssignableFrom(property.PropertyType.GetTypeInfo())
-                    select (IVariable)property.GetValue(this) into var
-                    where var.IsSaveData
-                    select var;
-            }
-        }
-
-        public IVariable<int> Result { get; } = new ArrayVariable<int>(nameof(Result), false, 1000, Serializer.IntegerSerializer.Instance);
-        public IVariable<string> ResultS { get; } = new ArrayVariable<string>(nameof(ResultS), false, 1000, Serializer.StringSerializer.Instance);
+            =>
+                from property in this.GetType().GetRuntimeProperties()
+                where typeof(IVariable).GetTypeInfo().IsAssignableFrom(property.PropertyType.GetTypeInfo())
+                select (IVariable) property.GetValue(this)
+                into var
+                where var.IsSaveData
+                select var;
 
         protected virtual void Save(BinaryWriter writer)
         {

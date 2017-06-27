@@ -18,6 +18,13 @@ namespace EraCS
 
     }
 
+    public enum ProgramStatus
+    {
+        Idle,
+        Running,
+        Waiting
+    } 
+
     public abstract class EraProgram<TVariable, TConfig>
         where TVariable : VariableDataBase where TConfig : EraConfig
     {
@@ -29,12 +36,9 @@ namespace EraCS
         public EraConsole Console { get; }
         public TVariable VarData { get; }
         public TConfig Config { get; }
-
-
-        public Task WorkerTask { get; private set; }
-        public bool IsRunning => WorkerTask?.Status == TaskStatus.Running;
+        public ProgramStatus Status;
+        
         public bool IsWaiting => _currentInputReq != null;
-        public bool IsWorkerTask => WorkerTask?.Id == Task.CurrentId;
         public long CurrentTime => _timer.ElapsedMilliseconds;
 
         public EraProgram(EraConsole console, TVariable varData, TConfig config)
@@ -43,41 +47,41 @@ namespace EraCS
             VarData = varData;
             Config = config;
 
+            console.ConsoleBackColor = config.BackColor;
+            console.ConsoleTextColor = config.TextColor;
+
             console.TextEntered += OnTextEntered;
         }
 
-        protected abstract void RunScript();
+        protected abstract void RunScriptAsync();
+
+        private string _lastInputValue = null;
 
         public void OnTextEntered(string value)
         {
+            if (!IsWaiting) return;
 
-            lock (_inputLock)
+            Status = ProgramStatus.Waiting;
+
+            switch (_currentInputReq.InputType)
             {
-                if (!IsWaiting) return;
-
-                switch (_currentInputReq.InputType)
-                {
-                    case InputType.ANYKEY:
-                        break;
-                    case InputType.INT:
-                        if (!int.TryParse(value, out var num)) return;
-                        VarData.Result[0] = num;
-                        break;
-                    case InputType.STR:
-                        VarData.ResultS[0] = value;
-                        break;
-                }
-
-                _currentInputReq = null;
-
-                Monitor.PulseAll(_inputLock);
+                case InputType.ANYKEY:
+                    _lastInputValue = null;
+                    break;
+                case InputType.INT:
+                    if (!int.TryParse(value, out var num)) return;
+                    _lastInputValue = value;
+                    break;
+                case InputType.STR:
+                    _lastInputValue = value;
+                    break;
             }
+
+            _currentInputReq = null;
         }
 
         public void Start(params IPlatform<TVariable, TConfig>[] platforms)
         {
-            if (IsRunning) throw new InvalidOperationException();
-
             foreach (var p in platforms) p.Initialize(this);
 
             _methods =
@@ -85,8 +89,7 @@ namespace EraCS
                 .SelectMany(p => p.Methods)
                 .ToDictionary(p => p.Key, p => p.Value);
 
-            WorkerTask = new Task(RunScript, TaskCreationOptions.LongRunning);
-            WorkerTask.Start();
+            RunScriptAsync();
         }
 
         public object Call(string name, params object[] args)
@@ -102,26 +105,23 @@ namespace EraCS
         public T Call<T>(string name, params object[] args) => (T)Call(name, args);
 
         protected const int WAIT_TIMEOUT = 250;
-        public void Wait(InputRequest req)
+
+        public async Task<string> WaitAsync(InputRequest req)
         {
-            Monitor.Enter(_inputLock);
+            _currentInputReq = req;
+
+            while (IsWaiting)
             {
-                _currentInputReq = req;
+                await Task.Delay(WAIT_TIMEOUT);
 
-                while (IsWaiting)
+                if (req.HasTimeout && req.EndTime < CurrentTime)
                 {
-                    if (Monitor.Wait(_inputLock, WAIT_TIMEOUT)) break;
-
-                    if (req.HasTimeout && req.EndTime < CurrentTime)
-                    {
-                        Monitor.Exit(_inputLock);
-                        OnTextEntered(req.DefaultValue);
-                        return;
-                    }
+                    OnTextEntered(req.DefaultValue);
+                    break;
                 }
             }
-            Monitor.Exit(_inputLock);
 
+            return _lastInputValue;
         }
 
     }

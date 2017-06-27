@@ -37,9 +37,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <PackageReference Include="Riey.Common.Config">
-      <Version>1.3.1.1</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>2.3.4.224</Version>
     </PackageReference>

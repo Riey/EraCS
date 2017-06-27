@@ -9,7 +9,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Image Grid.Row="0"/>
-            <Editor Grid.Row="1" x:Name="ConsoleEditor" BackgroundColor="{Binding ConsoleBackColor}" TextColor="{Binding ConsoleTextColor}"/>
+            <Entry Grid.Row="1" x:Name="ConsoleEditor" Completed="ConsoleEditor_OnCompleted" BackgroundColor="{Binding ConsoleBackColor}" TextColor="{Binding ConsoleTextColor}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

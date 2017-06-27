@@ -28,7 +28,7 @@ namespace EraCS.Console
                 propertyName: nameof(ConsoleTextColor),
                 returnType: typeof(Color),
                 declaringType: typeof(EraConsole),
-                defaultValue: Color.LightGray);
+                defaultValue: Color.White);
 
         public static readonly BindableProperty ConsoleBackColorProperty =
             BindableProperty.Create(

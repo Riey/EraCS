@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Riey.EraCS.UI.Core</id>
+    <version>1.1.0</version>
+    <title>Riey.EraCS.UI.Core</title>
+    <authors>Riey</authors>
+    <owners>Riey</owners>
+    <licenseUrl>http://github.com/Riey/EraCS/LICENSE</licenseUrl>
+    <projectUrl>http://github.com/Riey/EraCS</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>EraCS UI Core</description>
+    <copyright>Copyright 2017</copyright>
+    <tags>EraCS</tags>
+    <dependencies>
+      <dependency id="Riey.EraCS.Core" version="1.1.0" />
+      <dependency id="Xamarin.Forms" version="2.3.4.224" />
+    </dependencies>
+  </metadata>
+</package>
