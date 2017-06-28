@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EraCS.Console;
+﻿using EraCS.UI.EraConsole;
 using Xamarin.Forms;
 
 namespace EraCS.Core.Test.Program
 {
-    public class TestProgram : EraProgram<TestVariableData, TestConfig>
+    public class TestProgram : EraProgram<TestVariableData, EraConsole, TestConfig>
     {
         public TestProgram() : base(new EraConsole(), new TestVariableData(), new TestConfig())
         {
@@ -17,6 +13,9 @@ namespace EraCS.Core.Test.Program
         {
             Console.Alignment = LayoutOptions.Center;
             Call("SystemTitle");
+
+            Console.PrintButton("Click Me!!", "ABC");
+            Console.NewLine();
 
             Console.PrintLine("Please input");
             

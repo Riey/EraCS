@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using EraCS.UI.EraConsole;
 using Xamarin.Forms;
 
 namespace EraCS.Core.Test.Program
 {
-    public class TestPlatform : IPlatform<TestVariableData, TestConfig>
+    public class TestPlatform : IPlatform<TestVariableData, EraConsole, TestConfig>
     {
-        private EraProgram<TestVariableData, TestConfig> _program;
+        private EraProgram<TestVariableData, EraConsole, TestConfig> _program;
 
         public IReadOnlyDictionary<string, Delegate> Methods =>
             new Dictionary<string, Delegate>()
@@ -42,7 +43,7 @@ namespace EraCS.Core.Test.Program
             _program.Console.PrintLine($"Current time: {_program.VarData.Time[0]}");
         }
 
-        public void Initialize(EraProgram<TestVariableData, TestConfig> program)
+        public void Initialize(EraProgram<TestVariableData, EraConsole, TestConfig> program)
         {
             _program = program;
         }

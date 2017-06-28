@@ -1,10 +1,4 @@
-﻿using EraCS.Console;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,9 +8,9 @@ namespace EraCS.UI
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        private readonly EraConsole _console;
+        private readonly IEraConsole _console;
 
-        public MainPage(EraConsole console)
+        public MainPage(IEraConsole console)
         {
             _console = console;
             BindingContext = console;

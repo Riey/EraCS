@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace EraCS.Console
+namespace EraCS.UI.EraConsole
 {
-    public delegate void TextEnteredHandler(string text);
-
-    public sealed class EraConsole : BindableObject
+    public sealed class EraConsole : BindableObject, IEraConsole
     {
-        private List<ButtonClickCommand> _activeButtons = new List<ButtonClickCommand>(100);
+        private readonly List<ConsoleButtonPart> _activeButtons = new List<ConsoleButtonPart>(100);
         private readonly StackLayout _stack;
-        
+
         private bool _blankLineFlag = true;
 
         public static readonly BindableProperty ConsoleTextColorProperty =
@@ -30,24 +25,48 @@ namespace EraCS.Console
                 declaringType: typeof(EraConsole),
                 defaultValue: Color.Black);
 
+        public static readonly BindableProperty ConsoleHighlightColorProperty =
+            BindableProperty.Create(
+                propertyName: nameof(ConsoleHighlightColor),
+                returnType: typeof(Color),
+                declaringType: typeof(EraConsole),
+                defaultValue: Color.Yellow);
+
         public EraConsole()
         {
-            _stack = new StackLayout() { VerticalOptions = LayoutOptions.EndAndExpand };
+            _stack = new StackLayout() {VerticalOptions = LayoutOptions.EndAndExpand};
             _stack.SetBinding(StackLayout.BackgroundColorProperty, "ConsoleBackColor", BindingMode.OneWay);
         }
 
-        private StackLayout LastLine => (StackLayout)_stack.Children[_stack.Children.Count - 1];
+        private StackLayout LastLine => (StackLayout) _stack.Children[_stack.Children.Count - 1];
 
         public View View => _stack;
 
-        public Color ConsoleTextColor { get => (Color)GetValue(ConsoleTextColorProperty); set => SetValueAndRaise(ConsoleTextColorProperty, value); }
-        public Color ConsoleBackColor { get => (Color)GetValue(ConsoleBackColorProperty); set => SetValueAndRaise(ConsoleBackColorProperty, value); }
+        public Color ConsoleTextColor
+        {
+            get => (Color) GetValue(ConsoleTextColorProperty);
+            set => SetValueAndRaise(ConsoleTextColorProperty, value);
+        }
+
+        public Color ConsoleBackColor
+        {
+            get => (Color) GetValue(ConsoleBackColorProperty);
+            set => SetValueAndRaise(ConsoleBackColorProperty, value);
+        }
+
+        public Color ConsoleHighlightColor
+        {
+            get => (Color) GetValue(ConsoleHighlightColorProperty);
+            set => SetValueAndRaise(ConsoleHighlightColorProperty, value);
+        }
+
         public bool SkipPrint { get; set; }
         public LayoutOptions Alignment { get; set; } = LayoutOptions.Start;
 
         public bool LastLineIsTemporary { get; set; }
 
-        private void SetValueAndRaise(BindableProperty property, object value, [CallerMemberName] string propertyName = "")
+        private void SetValueAndRaise(BindableProperty property, object value,
+            [CallerMemberName] string propertyName = "")
         {
             SetValue(property, value);
             OnPropertyChanged(propertyName);
@@ -55,7 +74,7 @@ namespace EraCS.Console
 
         private void AddBlankLine()
         {
-            var line = new StackLayout() { HorizontalOptions = Alignment, Orientation = StackOrientation.Horizontal };
+            var line = new StackLayout() {HorizontalOptions = Alignment, Orientation = StackOrientation.Horizontal};
             line.SetBinding(StackLayout.BackgroundColorProperty, "ConsoleBackColor", BindingMode.OneWay);
             _stack.Children.Add(line);
         }
@@ -70,13 +89,13 @@ namespace EraCS.Console
                 LastLineIsTemporary = false;
             }
 
-            if(_blankLineFlag || _stack.Children.Count == 0)
+            if (_blankLineFlag || _stack.Children.Count == 0)
             {
                 AddBlankLine();
                 _blankLineFlag = false;
             }
 
-            LastLine.Children.Add(ConsoleViewFactory.MakeView(part));
+            LastLine.Children.Add(part);
         }
 
         public void OnTextEntered(string value)
@@ -84,19 +103,21 @@ namespace EraCS.Console
             TextEntered?.Invoke(value);
         }
 
-        public event TextEnteredHandler TextEntered; 
+        public event TextEnteredHandler TextEntered;
 
         public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str));
-        public void PrintLine(string str) { Print(str); NewLine(); }
+
+        public void PrintLine(string str)
+        {
+            Print(str);
+            NewLine();
+        }
+
         public void PrintButton(string text, string value)
         {
-            var com = new ButtonClickCommand(OnTextEntered);
-            _activeButtons.Add(com);
-            AddPart(
-                new ConsoleButtonPart(
-                    new ConsoleStringPart(ConsoleTextColor, text),
-                    value, 
-                    com));
+            var btn = new ConsoleButtonPart(text, value, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
+            _activeButtons.Add(btn);
+            AddPart(btn);
         }
 
         public void NewLine()
@@ -127,25 +148,11 @@ namespace EraCS.Console
 
             LastLineIsTemporary = false;
         }
-        
-        public void DeActiveButtons() { foreach (var com in _activeButtons) com.IsValid = false; _activeButtons.Clear(); }
 
-        private class ButtonClickCommand : ICommand
+        public void DeActiveButtons()
         {
-            private readonly Action<string> _action;
-
-            public bool IsValid { get; set; }
-
-            public ButtonClickCommand(Action<string> action) { _action = action; }
-
-            public event EventHandler CanExecuteChanged;
-
-            public bool CanExecute(object parameter) => IsValid;
-
-            public void Execute(object parameter)
-            {
-                _action((string)parameter);
-            }
+            foreach (var com in _activeButtons) com.Clickable = false;
+            _activeButtons.Clear();
         }
     }
 }

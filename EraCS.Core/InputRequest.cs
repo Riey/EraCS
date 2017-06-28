@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EraCS.Console
+namespace EraCS
 {
     public enum InputType
     {

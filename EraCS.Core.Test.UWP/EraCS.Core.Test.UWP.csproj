@@ -143,6 +143,10 @@
       <Project>{f044d821-c9e9-4df7-9b37-dfe2be4dd711}</Project>
       <Name>EraCS.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EraCS.UI.Console.EraConsole\EraCS.UI.Console.EraConsole.csproj">
+      <Project>{48FAEA71-96F3-4F48-A7F1-4E06E519B2FE}</Project>
+      <Name>EraCS.UI.Console.EraConsole</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

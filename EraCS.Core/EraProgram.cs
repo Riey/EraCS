@@ -1,5 +1,4 @@
-﻿using EraCS.Console;
-using EraCS.Variable;
+﻿using EraCS.Variable;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,29 +7,21 @@ using System.Threading.Tasks;
 
 namespace EraCS
 {
-    public interface IPlatform<TVariable, TConfig> where TVariable : VariableDataBase where TConfig : EraConfig
-    {
-        void Initialize(EraProgram<TVariable, TConfig> program);
-
-        IReadOnlyDictionary<string, Delegate> Methods { get; }
-
-    }
-
     public enum ProgramStatus
     {
         Idle,
         Running,
         Waiting
-    } 
+    }
 
-    public abstract class EraProgram<TVariable, TConfig>
-        where TVariable : VariableDataBase where TConfig : EraConfig
+    public abstract class EraProgram<TVariable, TConsole, TConfig>
+        where TVariable : VariableDataBase where TConsole:IEraConsole where TConfig : EraConfig
     {
         private readonly Stopwatch _timer = new Stopwatch();
         protected IReadOnlyDictionary<string, Delegate> methods;
         protected InputRequest currentInputReq;
 
-        public EraConsole Console { get; }
+        public TConsole Console { get; }
         public TVariable VarData { get; }
         public TConfig Config { get; }
 
@@ -44,7 +35,7 @@ namespace EraCS
         public bool IsWaiting => currentInputReq != null;
         public long CurrentTime => _timer.ElapsedMilliseconds;
 
-        protected EraProgram(EraConsole console, TVariable varData, TConfig config)
+        protected EraProgram(TConsole console, TVariable varData, TConfig config)
         {
             Console = console;
             VarData = varData;
@@ -86,7 +77,7 @@ namespace EraCS
             currentInputReq = null;
         }
 
-        public void Start(params IPlatform<TVariable, TConfig>[] platforms)
+        public void Start(params IPlatform<TVariable, TConsole, TConfig>[] platforms)
         {
             foreach (var p in platforms) p.Initialize(this);
 
@@ -162,6 +153,8 @@ namespace EraCS
                     break;
                 }
             }
+
+            Console.DeActiveButtons();
         }
 
     }

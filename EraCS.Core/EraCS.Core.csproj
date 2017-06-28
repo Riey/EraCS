@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -42,11 +42,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Console\ConsoleViewFactory.cs" />
-    <Compile Include="Console\EraConsole.cs" />
-    <Compile Include="Console\InputRequest.cs" />
+    <Compile Include="IEraConsole.cs" />
+    <Compile Include="InputRequest.cs" />
     <Compile Include="EraConfig.cs" />
     <Compile Include="EraProgram.cs" />
+    <Compile Include="IPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variable\ArrayVariable.cs" />
     <Compile Include="Variable\FunctionVariable.cs" />
@@ -61,8 +61,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "$(SolutionDir)Binary\$(ConfigurationName)\" mkdir "$(SolutionDir)Binary\$(ConfigurationName)\"
-copy $(TargetDir)$(TargetName)$(TargetExt) "$(SolutionDir)Binary\$(ConfigurationName)\"
-copy $(TargetDir)$(TargetName).pdb "$(SolutionDir)Binary\$(ConfigurationName)\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
