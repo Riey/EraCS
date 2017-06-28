@@ -9,7 +9,7 @@
     <licenseUrl>http://github.com/Riey/EraCS/LICENSE</licenseUrl>
     <projectUrl>http://github.com/Riey/EraCS</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>EraCS UI Core</description>
+    <description>EraCS Console UI</description>
     <copyright>Copyright 2017</copyright>
     <tags>EraCS EraConsole</tags>
     <dependencies>
