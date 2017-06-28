@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -16,12 +14,7 @@ namespace EraCS.Console
         private List<ButtonClickCommand> _activeButtons = new List<ButtonClickCommand>(100);
         private readonly StackLayout _stack;
         
-        private bool _lastLineIsTemporary = false;
         private bool _blankLineFlag = true;
-
-        private StackLayout LastLine => (StackLayout)_stack.Children[_stack.Children.Count - 1];
-
-        public View View => _stack;
 
         public static readonly BindableProperty ConsoleTextColorProperty =
             BindableProperty.Create(
@@ -43,16 +36,22 @@ namespace EraCS.Console
             _stack.SetBinding(StackLayout.BackgroundColorProperty, "ConsoleBackColor", BindingMode.OneWay);
         }
 
+        private StackLayout LastLine => (StackLayout)_stack.Children[_stack.Children.Count - 1];
+
+        public View View => _stack;
+
+        public Color ConsoleTextColor { get => (Color)GetValue(ConsoleTextColorProperty); set => SetValueAndRaise(ConsoleTextColorProperty, value); }
+        public Color ConsoleBackColor { get => (Color)GetValue(ConsoleBackColorProperty); set => SetValueAndRaise(ConsoleBackColorProperty, value); }
+        public bool SkipPrint { get; set; }
+        public LayoutOptions Alignment { get; set; } = LayoutOptions.Start;
+
+        public bool LastLineIsTemporary { get; set; }
+
         private void SetValueAndRaise(BindableProperty property, object value, [CallerMemberName] string propertyName = "")
         {
             SetValue(property, value);
             OnPropertyChanged(propertyName);
         }
-
-        public Color ConsoleTextColor { get => (Color)GetValue(ConsoleTextColorProperty); set => SetValueAndRaise(ConsoleTextColorProperty, value); }
-        public Color ConsoleBackColor { get => (Color)GetValue(ConsoleBackColorProperty); set => SetValueAndRaise(ConsoleBackColorProperty, value); }
-        public bool SkipPrint { get; set; }
-        public LayoutOptions Alignment { get; set; } = LayoutOptions.Center;
 
         private void AddBlankLine()
         {
@@ -65,10 +64,10 @@ namespace EraCS.Console
         {
             if (SkipPrint) return;
 
-            if (_lastLineIsTemporary)
+            if (LastLineIsTemporary)
             {
                 _stack.Children.RemoveAt(_stack.Children.Count - 1);
-                _lastLineIsTemporary = false;
+                LastLineIsTemporary = false;
             }
 
             if(_blankLineFlag || _stack.Children.Count == 0)
@@ -102,7 +101,13 @@ namespace EraCS.Console
 
         public void NewLine()
         {
-            if(_blankLineFlag)
+            if (LastLineIsTemporary)
+            {
+                _stack.Children.RemoveAt(_stack.Children.Count - 1);
+                LastLineIsTemporary = false;
+            }
+
+            if (_blankLineFlag)
             {
                 AddBlankLine();
                 _blankLineFlag = false;
@@ -113,6 +118,16 @@ namespace EraCS.Console
             }
         }
 
+        public void DeleteLine(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                _stack.Children.RemoveAt(_stack.Children.Count - 1);
+            }
+
+            LastLineIsTemporary = false;
+        }
+        
         public void DeActiveButtons() { foreach (var com in _activeButtons) com.IsValid = false; _activeButtons.Clear(); }
 
         private class ButtonClickCommand : ICommand

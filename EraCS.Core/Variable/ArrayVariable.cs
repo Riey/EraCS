@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EraCS.Variable.Serializer;
 
 namespace EraCS.Variable
 {
     public class ArrayVariable<T> : Variable<T>
     {
-        protected T[] _data;
+        protected T[] data;
 
         public ArrayVariable(string name, bool isSaveData, int size, ISerializer<T> serializer) : base(name, isSaveData, size, serializer)
         {
-            _data = new T[size];
+            data = new T[size];
         }
 
         public override T this[int index]
         {
-            get => _data[index];
-            set => OnVariableChanged(index, ref _data[index], ref value);
+            get => data[index];
+            set => OnVariableChanged(index, ref data[index], ref value);
         }
 
-        public override IEnumerator<T> GetEnumerator() { for (int i = 0; i < _data.Length; i++) yield return _data[i]; }
+        public override IEnumerator<T> GetEnumerator()
+        {
+            foreach (T t in data) yield return t;
+        }
 
         public override void Reset()
         {
-            _data.Initialize();
+            data.Initialize();
         }
 
-        protected override void Initialize(T[] data)
+        protected override void Initialize(T[] initData)
         {
-            _data = data;
+            data = initData;
         }
     }
 

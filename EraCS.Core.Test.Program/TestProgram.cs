@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EraCS.Console;
+using Xamarin.Forms;
 
 namespace EraCS.Core.Test.Program
 {
@@ -13,9 +15,19 @@ namespace EraCS.Core.Test.Program
 
         protected override async void RunScriptAsync()
         {
+            Console.Alignment = LayoutOptions.Center;
             Call("SystemTitle");
-            var input = await WaitAsync(new InputRequest(InputType.STR));
 
+            Console.PrintLine("Please input");
+            
+            var input = await WaitStringAsync(6000, defaultValue: "FUXX You",
+                tickAction: (left) =>
+                {
+                    Console.PrintLine($"Time {6000 - left}/6000");
+                    Console.LastLineIsTemporary = true;
+                });
+            
+            Console.DeleteLine(2);
             Console.NewLine();
             Console.NewLine();
             Console.PrintLine($"You wrote: {input}");

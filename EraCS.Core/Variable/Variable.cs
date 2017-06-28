@@ -3,15 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EraCS.Variable
 {
     public abstract class Variable<T> : IVariable<T>
     {
-        protected readonly ISerializer<T> _serializer;
+        protected readonly ISerializer<T> serializer;
 
         public abstract T this[int index] { get; set; }
 
@@ -26,7 +23,7 @@ namespace EraCS.Variable
             Name = name;
             IsSaveData = isSaveData;
             Size = size;
-            _serializer = serializer;
+            this.serializer = serializer;
         }
 
         protected void OnVariableChanged(int index, ref T oldValue, ref T newValue)
@@ -42,7 +39,7 @@ namespace EraCS.Variable
             for (int i = lower; i <= higher; i++) this[i] = value;
         }
 
-        protected abstract void Initialize(T[] data);
+        protected abstract void Initialize(T[] initData);
 
         public abstract IEnumerator<T> GetEnumerator();
         public abstract void Reset();
@@ -55,7 +52,7 @@ namespace EraCS.Variable
             writer.Write(Size);
 
             foreach (var d in this)
-                _serializer.Serialize(writer, d);
+                serializer.Serialize(writer, d);
         }
 
         public virtual void DeSerialize(BinaryReader reader)
@@ -65,7 +62,7 @@ namespace EraCS.Variable
             var size = reader.ReadInt32();
             var data = new T[size];
 
-            for (int i = 0; i < data.Length; i++) data[i] = _serializer.DeSerialize(reader);
+            for (int i = 0; i < data.Length; i++) data[i] = serializer.DeSerialize(reader);
             Initialize(data);
         }
 
