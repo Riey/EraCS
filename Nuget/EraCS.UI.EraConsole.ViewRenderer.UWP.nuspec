@@ -1,20 +1,23 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Riey.EraCS.UI.EraConsole.ViewRenderer.UWP</id>
-    <version>$version$</version>
-    <title>Riey.EraCS.UI.EraConsole.ViewRenderer.UWP</title>
+    <id>Riey.EraCS.UI.EraConsole.ViewRenderer.UWP.$platform$</id>
+    <version>$uwp_renderer_version$</version>
+    <title>Riey.EraCS.UI.EraConsole.ViewRenderer.UWP.$platform$</title>
     <authors>Riey</authors>
     <owners>Riey</owners>
     <licenseUrl>http://github.com/Riey/EraCS/LICENSE</licenseUrl>
     <projectUrl>http://github.com/Riey/EraCS</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>EraConsole UWP ViewRenderer</description>
+    <description>EraConsole UWP ViewRenderer $platform$</description>
     <copyright>Copyright 2017</copyright>
     <tags>EraCS</tags>
     <dependencies>
-      <dependency id="Riey.EraCS.UI.EraConsole" version="1.0.0" />
-      <dependency id="Xamarin.Forms" version="2.3.4.224" />
+      <dependency id="Riey.EraCS.UI.EraConsole" version="$console_version$" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="..\bin\$platform$\Release\EraCS.UI.EraConsole.ViewRenderer.UWP.dll" target="lib\uap10.0" />
+	<file src="..\bin\$platform$\Release\EraCS.UI.EraConsole.ViewRenderer.UWP.pdb" target="lib\uap10.0" />
+  </files>
 </package>

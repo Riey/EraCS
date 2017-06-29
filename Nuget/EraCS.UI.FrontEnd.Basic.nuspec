@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Riey.EraCS.UI.FrontEnd.Basic</id>
+    <version>$frontend_version$</version>
+    <title>Riey.EraCS.UI.FrontEnd.Basic</title>
+    <authors>Riey</authors>
+    <owners>Riey</owners>
+    <licenseUrl>http://github.com/Riey/EraCS/LICENSE</licenseUrl>
+    <projectUrl>http://github.com/Riey/EraCS</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>EraCS Basic FrontEnd</description>
+    <copyright>Copyright 2017</copyright>
+    <tags>EraCS</tags>
+    <dependencies>
+      <dependency id="Riey.EraCS.Core" version="$core_version$" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.dll" target="lib\net45" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.pdb" target="lib\net45" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.dll" target="lib\netstandard1.4" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.pdb" target="lib\netstandard1.4" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.dll" target="lib\portable45-net45+win8+wp8+wpa81" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.pdb" target="lib\portable45-net45+win8+wp8+wpa81" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.dll" target="lib\uap10.0" />
+	<file src="..\bin\Release\EraCS.UI.FrontEnd.Basic.pdb" target="lib\uap10.0" />
+  </files>
+</package>

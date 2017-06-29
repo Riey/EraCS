@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Riey.EraCS.Core</id>
-    <version>$version</version>
+    <version>$core_version$</version>
     <title>Riey.EraCS.Core</title>
     <authors>Riey</authors>
     <owners>Riey</owners>
@@ -13,7 +13,17 @@
     <copyright>Copyright 2017</copyright>
     <tags>EraCS</tags>
     <dependencies>
-      <dependency id="Xamarin.Forms" version="2.3.4.224"/>
+      <dependency id="Xamarin.Forms" version="$xamarin_version$" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="..\bin\Release\EraCS.Core.dll" target="lib\net45" />
+	<file src="..\bin\Release\EraCS.Core.pdb" target="lib\net45" />
+	<file src="..\bin\Release\EraCS.Core.dll" target="lib\netstandard1.4" />
+	<file src="..\bin\Release\EraCS.Core.pdb" target="lib\netstandard1.4" />
+	<file src="..\bin\Release\EraCS.Core.dll" target="lib\portable45-net45+win8+wp8+wpa81" />
+	<file src="..\bin\Release\EraCS.Core.pdb" target="lib\portable45-net45+win8+wp8+wpa81" />
+	<file src="..\bin\Release\EraCS.Core.dll" target="lib\uap10.0" />
+	<file src="..\bin\Release\EraCS.Core.pdb" target="lib\uap10.0" />
+  </files>
 </package>

@@ -25,14 +25,14 @@ namespace EraCS.Core.Test.Program
                 _program.Console.Print(str);
             }
 
-            PrintWith("F", Color.Red);
-            PrintWith("U", Color.OrangeRed);
-            PrintWith("C", Color.Yellow);
-            PrintWith("K", Color.Green);
+            PrintWith("R", Color.Red);
+            PrintWith("A", Color.OrangeRed);
+            PrintWith("I", Color.Yellow);
+            PrintWith("N", Color.Green);
             _program.Console.Print(" ");
-            PrintWith("Y", Color.Blue);
+            PrintWith("B", Color.Blue);
             PrintWith("O", Color.Indigo);
-            PrintWith("U", Color.Purple);
+            PrintWith("W", Color.Purple);
             
             _program.Console.ConsoleTextColor = Color.White;
 
