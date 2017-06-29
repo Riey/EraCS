@@ -23,14 +23,14 @@ namespace EraCS.Core.Test.UWP
             var firstTime = DateTime.Now;
             _program.VarData.Time[0] = firstTime;
 
-            _program.VarData.Save(ms, true);
-            var lastTime = DateTime.Now;
+            _program.Save(ms, true);
+            var lastTime = firstTime + TimeSpan.FromDays(1);
             _program.VarData.Time[0] = lastTime;
 
             Assert.AreEqual(lastTime, _program.VarData.Time[0]);
 
             ms.Seek(0, SeekOrigin.Begin);
-            _program.VarData.Load(ms, true);
+            _program.Load(ms, true);
             ms.Dispose();
 
             Assert.AreEqual(firstTime, _program.VarData.Time[0]);

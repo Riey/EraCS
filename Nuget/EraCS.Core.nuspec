@@ -14,6 +14,7 @@
     <tags>EraCS</tags>
     <dependencies>
       <dependency id="Xamarin.Forms" version="$xamarin_version$" />
+      <dependency id="Newtonsoft.Json" version="10.0.3" />
     </dependencies>
   </metadata>
   <files>

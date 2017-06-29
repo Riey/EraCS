@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EraCS.Variable.Serializer;
 
 namespace EraCS.Variable
 {
@@ -11,7 +7,7 @@ namespace EraCS.Variable
     {
         private readonly Func<int, T> _valueFactory;
 
-        public FunctionVariable(string name, int size, Func<int, T> valueFactory) : base(name, false, size, null)
+        public FunctionVariable(string name, int size, Func<int, T> valueFactory) : base(name, size)
         {
             _valueFactory = valueFactory;
         }
@@ -29,10 +25,6 @@ namespace EraCS.Variable
         }
 
         public override void Reset()
-        {
-        }
-
-        protected override void Initialize(T[] data)
         {
         }
     }

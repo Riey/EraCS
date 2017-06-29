@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using EraCS.Variable.Serializer;
+using Newtonsoft.Json;
 
 namespace EraCS.Variable
 {
     public class ArrayVariable<T> : Variable<T>
     {
+        [JsonProperty(PropertyName = "data")]
         protected T[] data;
 
-        public ArrayVariable(string name, bool isSaveData, int size, ISerializer<T> serializer) : base(name, isSaveData, size, serializer)
+        public ArrayVariable(string name, int size) : base(name, size)
         {
             data = new T[size];
         }
@@ -27,16 +28,11 @@ namespace EraCS.Variable
         {
             data.Initialize();
         }
-
-        protected override void Initialize(T[] initData)
-        {
-            data = initData;
-        }
     }
 
     public class NamedVariable<T> : ArrayVariable<T>, INamedVariable<T>
     {
-        public NamedVariable(string name, bool isSaveData, int size, ISerializer<T> serializer, IReadOnlyDictionary<string, int> nameDic) : base(name, isSaveData, size, serializer)
+        public NamedVariable(string name, int size, IReadOnlyDictionary<string, int> nameDic) : base(name, size)
         {
             NameDic = nameDic;
         }
@@ -47,6 +43,7 @@ namespace EraCS.Variable
             set => this[NameDic[name]] = value;
         }
 
-        public IReadOnlyDictionary<string, int> NameDic { get; }
+        [JsonProperty]
+        public IReadOnlyDictionary<string, int> NameDic { get; private set; }
     }
 }

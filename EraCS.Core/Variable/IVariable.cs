@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace EraCS.Variable
 {
     public delegate void VariableChangedHandler<T>(IVariable<T> sender, int index, T oldValue, ref T newValue);
 
-    public interface IVariable : IEnumerable, ISerializable
+    [JsonObject(MemberSerialization.OptOut)]
+    public interface IVariable : IEnumerable
     {
-        bool IsSaveData { get; }
         string Name { get; }
         int Size { get; }
 

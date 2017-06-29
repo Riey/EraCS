@@ -1,9 +1,11 @@
-﻿using EraCS.Variable;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace EraCS
 {
@@ -15,14 +17,14 @@ namespace EraCS
     }
 
     public abstract class EraProgram<TVariable, TConsole, TConfig>
-        where TVariable : VariableDataBase where TConsole:IEraConsole where TConfig : EraConfig
+        where TConsole : IEraConsole where TConfig : EraConfig
     {
         private readonly Stopwatch _timer = new Stopwatch();
         protected IReadOnlyDictionary<string, Delegate> methods;
         protected InputRequest currentInputReq;
 
         public TConsole Console { get; }
-        public TVariable VarData { get; }
+        public TVariable VarData { get; private set; }
         public TConfig Config { get; }
 
         public ProgramStatus Status =>
@@ -31,7 +33,7 @@ namespace EraCS
                     ? ProgramStatus.Waiting
                     : ProgramStatus.Running
                 : ProgramStatus.Idle;
-        
+
         public bool IsWaiting => currentInputReq != null;
         public long CurrentTime => _timer.ElapsedMilliseconds;
 
@@ -83,8 +85,8 @@ namespace EraCS
 
             methods =
                 platforms
-                .SelectMany(p => p.Methods)
-                .ToDictionary(p => p.Key, p => p.Value);
+                    .SelectMany(p => p.Methods)
+                    .ToDictionary(p => p.Key, p => p.Value);
 
             _timer.Start();
 
@@ -101,7 +103,19 @@ namespace EraCS
             throw new ArgumentException();
         }
 
-        public T Call<T>(string name, params object[] args) => (T)Call(name, args);
+        public void Save(Stream output, bool leaveOpen)
+        {
+            using (var writer = new StreamWriter(output, Encoding.UTF8, 8192, leaveOpen))
+                writer.Write(JsonConvert.SerializeObject(VarData, Formatting.Indented));
+        }
+
+        public void Load(Stream input, bool leaveOpen)
+        {
+            using (var reader = new StreamReader(input, Encoding.UTF8, leaveOpen))
+                VarData = JsonConvert.DeserializeObject<TVariable>(reader.ReadToEnd());
+        }
+
+        public T Call<T>(string name, params object[] args) => (T) Call(name, args);
 
         protected const int WAIT_TIMEOUT = 150;
 
@@ -116,7 +130,8 @@ namespace EraCS
             return _lastInputNumber;
         }
 
-        public async Task<int> WaitNumberAsync(long endTime, int? defaultValue = null, bool isOneInput = false, Action<long> tickAction = null)
+        public async Task<int> WaitNumberAsync(long endTime, int? defaultValue = null, bool isOneInput = false,
+            Action<long> tickAction = null)
         {
             await WaitAsync(new InputRequest(InputType.INT, endTime, defaultValue?.ToString(), isOneInput), tickAction);
             return _lastInputNumber;
@@ -128,7 +143,8 @@ namespace EraCS
             return _lastInputValue;
         }
 
-        public async Task<string> WaitStringAsync(long endTime, string defaultValue = null, bool isOneInput = false, Action<long> tickAction = null)
+        public async Task<string> WaitStringAsync(long endTime, string defaultValue = null, bool isOneInput = false,
+            Action<long> tickAction = null)
         {
             await WaitAsync(new InputRequest(InputType.STR, endTime, defaultValue, isOneInput), tickAction);
             return _lastInputValue;

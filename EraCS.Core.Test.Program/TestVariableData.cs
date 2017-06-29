@@ -1,19 +1,13 @@
 ﻿using EraCS.Variable;
-using EraCS.Variable.Serializer;
 using System;
+using Newtonsoft.Json;
 
 namespace EraCS.Core.Test.Program
 {
-    public class TestVariableData : VariableDataBase
+    [JsonObject]
+    public class TestVariableData
     {
-        public IVariable<DateTime> Time { get; } =
-            new ArrayVariable<DateTime>(
-                name: nameof(Time),
-                isSaveData: true,
-                size: 1,
-                serializer: new Serializer<DateTime>(
-                    (writer, value) => writer.Write(value.ToBinary()),
-                    (reader) => DateTime.FromBinary(reader.ReadInt64()))
-                );
+        [JsonProperty]
+        public IVariable<DateTime> Time { get; private set; } = new ArrayVariable<DateTime>(nameof(Time), 1);
     }
 }

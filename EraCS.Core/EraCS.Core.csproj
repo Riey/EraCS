@@ -37,6 +37,9 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>10.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>2.3.4.224</Version>
     </PackageReference>
@@ -50,14 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Variable\ArrayVariable.cs" />
     <Compile Include="Variable\FunctionVariable.cs" />
-    <Compile Include="Variable\ISerializable.cs" />
     <Compile Include="Variable\IVariable.cs" />
-    <Compile Include="Variable\Serializer\IntegerSerializer.cs" />
-    <Compile Include="Variable\Serializer\ISerializer.cs" />
-    <Compile Include="Variable\Serializer\Serializer.cs" />
-    <Compile Include="Variable\Serializer\StringSerializer.cs" />
     <Compile Include="Variable\Variable.cs" />
-    <Compile Include="Variable\VariableDataBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>
