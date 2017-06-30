@@ -21,19 +21,19 @@ namespace EraCS.Core.Test.UWP
         {
             var ms = new MemoryStream();
             var firstTime = DateTime.Now;
-            _program.VarData.Time[0] = firstTime;
+            _program.VarData.Time = firstTime;
 
             _program.Save(ms, true);
             var lastTime = firstTime + TimeSpan.FromDays(1);
-            _program.VarData.Time[0] = lastTime;
+            _program.VarData.Time = lastTime;
 
-            Assert.AreEqual(lastTime, _program.VarData.Time[0]);
+            Assert.AreEqual(lastTime, _program.VarData.Time);
 
             ms.Seek(0, SeekOrigin.Begin);
             _program.Load(ms, true);
             ms.Dispose();
 
-            Assert.AreEqual(firstTime, _program.VarData.Time[0]);
+            Assert.AreEqual(firstTime, _program.VarData.Time);
         }
     }
 }

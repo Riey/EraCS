@@ -1,5 +1,4 @@
-﻿using EraCS.Variable;
-using System;
+﻿using System;
 using Newtonsoft.Json;
 
 namespace EraCS.Core.Test.Program
@@ -8,6 +7,6 @@ namespace EraCS.Core.Test.Program
     public class TestVariableData
     {
         [JsonProperty]
-        public IVariable<DateTime> Time { get; private set; } = new ArrayVariable<DateTime>(nameof(Time), 1);
+        public DateTime Time { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace EraCS.UI.FrontEnd.Basic.Test.UWP
             InitializeComponent();
             var program = new TestProgram();
             LoadApplication(new FrontEnd.Basic.App(program.Console));
-            program.Start(new TestPlatform());
+            program.Start();
         }
     }
 }

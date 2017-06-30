@@ -1,4 +1,4 @@
-$CoreVersion = "1.1.1.1"
+$CoreVersion = "1.1.2.1"
 $FrontEndBasicVersion = "1.1.1.1"
 $EraConsoleVersion = "1.0.0.1"
 $UWPRendererVersion = "1.0.0.1"
