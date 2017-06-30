@@ -17,21 +17,21 @@ namespace EraCS
     public abstract class EraProgram<TVariable, TConsole>
         where TConsole : IEraConsole
     {
-        private readonly Stopwatch _timer = new Stopwatch();
+        protected readonly Stopwatch timer = new Stopwatch();
         protected InputRequest currentInputReq;
 
         public TConsole Console { get; }
         public TVariable VarData { get; private set; }
 
         public ProgramStatus Status =>
-            _timer.IsRunning
+            timer.IsRunning
                 ? IsWaiting
                     ? ProgramStatus.Waiting
                     : ProgramStatus.Running
                 : ProgramStatus.Idle;
 
         public bool IsWaiting => currentInputReq != null;
-        public long CurrentTime => _timer.ElapsedMilliseconds;
+        public long CurrentTime => timer.ElapsedMilliseconds;
 
         protected EraProgram(TConsole console, TVariable varData)
         {
@@ -73,7 +73,7 @@ namespace EraCS
 
         public void Start()
         {
-            _timer.Start();
+            timer.Start();
 
             RunScriptAsync();
         }
