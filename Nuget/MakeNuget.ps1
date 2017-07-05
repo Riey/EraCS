@@ -1,14 +1,10 @@
-$CoreVersion = "1.1.3"
-$FrontEndBasicVersion = "1.1.1.1"
-$EraConsoleVersion = "1.0.0.1"
-$UWPRendererVersion = "1.0.0.1"
+$CoreVersion = "1.2.0.0"
+$FrontEndWpfVersion = "1.2.0.0"
+$EraConsoleVersion = "1.2.0.0"
 $XamarinVersion = "2.3.4.224"
 
-$PropertiesArg = "xamarin_version=$XamarinVersion;core_version=$CoreVersion;frontend_version=$FrontEndBasicVersion;console_version=$EraConsoleVersion;uwp_renderer_version=$UWPRendererVersion" 
+$PropertiesArg = "xamarin_version=$XamarinVersion;core_version=$CoreVersion;frontend_wpf_version=$FrontEndWpfVersion;console_version=$EraConsoleVersion" 
 
 nuget pack EraCS.Core.nuspec -Version $CoreVersion -properties $PropertiesArg
-nuget pack EraCS.UI.FrontEnd.Basic.nuspec -Version $FrontEndBasicVersion -properties $PropertiesArg
+nuget pack EraCS.UI.FrontEnd.Wpf.nuspec -Version $FrontEndWpfVersion -properties $PropertiesArg
 nuget pack EraCS.UI.EraConsole.nuspec -Version $EraConsoleVersion -properties $PropertiesArg
-nuget pack EraCS.UI.EraConsole.ViewRenderer.UWP.nuspec -Version $UWPRendererVersion -properties $PropertiesArg -properties platform=x64
-nuget pack EraCS.UI.EraConsole.ViewRenderer.UWP.nuspec -Version $UWPRendererVersion -properties $PropertiesArg -properties platform=x86
-nuget pack EraCS.UI.EraConsole.ViewRenderer.UWP.nuspec -Version $UWPRendererVersion -properties $PropertiesArg -properties platform=ARM
