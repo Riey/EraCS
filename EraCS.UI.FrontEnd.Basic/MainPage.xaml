@@ -1,15 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             xmlns:basic="clr-namespace:EraCS.UI.FrontEnd.Basic;assembly=EraCS.UI.FrontEnd.Basic"
              x:Class="EraCS.UI.FrontEnd.Basic.MainPage">
+    <ContentPage.Resources>
+        <basic:SkColorConverter x:Key="SkColorConverter"/>
+        <basic:DoubleConveter x:Key="DoubleConveter"/>
+    </ContentPage.Resources>
     <ContentPage.Content>
-        <Grid x:Name="ConsoleGrid" BackgroundColor="{Binding ConsoleBackColor}">
+        <Grid x:Name="ConsoleGrid" BackgroundColor="{Binding ConsoleBackColor, Converter={StaticResource SkColorConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0"/>
-            <Entry Grid.Row="1" x:Name="ConsoleEditor" Completed="ConsoleEditor_OnCompleted" BackgroundColor="{Binding ConsoleBackColor}" TextColor="{Binding ConsoleTextColor}"/>
+            <skia:SKCanvasView Grid.Row="0" x:Name="ConsoleView" PaintSurface="ConsoleView_OnPaintSurface"
+                               HorizontalOptions="Fill" Height="{Binding Height, Converter={StaticResource DoubleConveter}}"/>
+            <Entry Grid.Row="1" x:Name="ConsoleEditor" Completed="ConsoleEditor_OnCompleted" BackgroundColor="{Binding ConsoleBackColor, Converter={StaticResource SkColorConverter}}" TextColor="{Binding ConsoleTextColor, Converter={StaticResource SkColorConverter}}"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

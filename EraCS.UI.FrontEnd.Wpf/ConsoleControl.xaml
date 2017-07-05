@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="EraCS.UI.FrontEnd.Wpf.ConsoleControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EraCS.UI.FrontEnd.Wpf"
+             xmlns:eraCs="clr-namespace:EraCS;assembly=EraCS.Core"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:FloatToDoubleConveter x:Key="FloatToDoubleConveter"/>
+        <local:SkColorConverter x:Key="SkColorConverter"/>
+        <local:LineHeightToMarginConverter x:Key="LineHeightToMarginConverter"/>
+    </UserControl.Resources>
+    <UserControl.Background>
+        <Binding Path="ConsoleBackColor" Converter="{StaticResource SkColorConverter}"/>
+    </UserControl.Background>
+    <StackPanel
+                VerticalAlignment="Bottom">
+        <skia:SKElement Name="ConsoleView" 
+                        Height="{Binding Height, Converter={StaticResource FloatToDoubleConveter}}"
+                        PaintSurface="ConsoleView_OnPaintSurface"
+                        MouseLeftButtonDown="ConsoleView_OnMouseLeftButtonDown"
+                        MouseMove="ConsoleView_OnMouseMove"/>
+        <TextBox Name="ConsoleTb"
+                 Background="#00000000" KeyDown="ConsoleTb_OnKeyDown"
+                 Margin="{Binding LineHeight, Converter={StaticResource LineHeightToMarginConverter}}"
+                 Foreground="{Binding ConsoleTextColor, Converter={StaticResource SkColorConverter}}"/>
+    </StackPanel>
+</UserControl>

@@ -147,14 +147,6 @@
       <Project>{f044d821-c9e9-4df7-9b37-dfe2be4dd711}</Project>
       <Name>EraCS.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EraCS.UI.FrontEnd.Basic\EraCS.UI.FrontEnd.Basic.csproj">
-      <Project>{c9a99337-07c3-4b46-b75d-6fa8345d67ec}</Project>
-      <Name>EraCS.UI.FrontEnd.Basic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EraCS.UI.Console.EraConsole.ViewRenderer.UWP\EraCS.UI.Console.EraConsole.ViewRenderer.UWP.csproj">
-      <Project>{e64d01fa-0961-4320-bad9-584b145b469e}</Project>
-      <Name>EraCS.UI.Console.EraConsole.ViewRenderer.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EraCS.UI.Console.EraConsole\EraCS.UI.Console.EraConsole.csproj">
       <Project>{48faea71-96f3-4f48-a7f1-4e06e519b2fe}</Project>
       <Name>EraCS.UI.Console.EraConsole</Name>

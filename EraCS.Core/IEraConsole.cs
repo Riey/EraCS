@@ -1,19 +1,27 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using SkiaSharp;
+using System.ComponentModel;
 
 namespace EraCS
 {
     public delegate void TextEnteredHandler(string text);
 
-    public interface IEraConsole
+    public interface IEraConsole : INotifyPropertyChanged
     {
-        Color ConsoleTextColor { get; set; }
-        Color ConsoleBackColor { get; set; }
-        Color ConsoleHighlightColor { get; set; }
+        SKColor ConsoleTextColor { get; set; }
+        SKColor ConsoleBackColor { get; set; }
+        SKColor ConsoleHighlightColor { get; set; }
+        float Height { get; }
+
         event TextEnteredHandler TextEntered;
+        event Action DrawRequested;
+
+        void OnCursorMoved(float x, float y);
+        void OnClicked(float x, float y);
         void OnTextEntered(string text);
 
         void DeActiveButtons();
 
-        View View { get; }
+        void Draw(SKCanvas c);
     }
 }

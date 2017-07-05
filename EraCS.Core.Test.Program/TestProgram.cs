@@ -1,18 +1,18 @@
 ﻿using System;
 using EraCS.UI.EraConsole;
-using Xamarin.Forms;
 
 namespace EraCS.Core.Test.Program
 {
+
     public class TestProgram : EraProgram<TestVariableData, EraConsole>
     {
         public TestProgram() 
             : base(
                   new EraConsole
                   {
-                      ConsoleTextColor = Color.FromRgb(196, 196, 196),
-                      ConsoleBackColor = Color.Black,
-                      ConsoleHighlightColor = Color.Yellow
+                      ConsoleTextColor = ColorTool.ToColor(KnownColor.White),
+                      ConsoleBackColor = ColorTool.ToColor(KnownColor.Black),
+                      ConsoleHighlightColor = ColorTool.ToColor(KnownColor.Yellow)
                   } , 
                   new TestVariableData())
         {
@@ -22,22 +22,22 @@ namespace EraCS.Core.Test.Program
         {
             VarData.Time = DateTime.Now;
 
-            void PrintWith(string str, Color color)
+            void PrintWith(string str, KnownColor color)
             {
-                Console.ConsoleTextColor = color;
+                Console.SetTextColor(color);
                 Console.Print(str);
             }
 
-            PrintWith("R", Color.Red);
-            PrintWith("A", Color.OrangeRed);
-            PrintWith("I", Color.Yellow);
-            PrintWith("N", Color.Green);
+            PrintWith("R", KnownColor.Red);
+            PrintWith("A", KnownColor.OrangeRed);
+            PrintWith("I", KnownColor.Yellow);
+            PrintWith("N", KnownColor.Green);
             Console.Print(" ");
-            PrintWith("B", Color.Blue);
-            PrintWith("O", Color.Indigo);
-            PrintWith("W", Color.Purple);
+            PrintWith("B", KnownColor.Blue);
+            PrintWith("O", KnownColor.Indigo);
+            PrintWith("W", KnownColor.Purple);
 
-            Console.ConsoleTextColor = Color.White;
+            Console.SetTextColor(KnownColor.White);
 
             Console.NewLine();
             Console.NewLine();
@@ -48,7 +48,7 @@ namespace EraCS.Core.Test.Program
 
         protected override async void RunScriptAsync()
         {
-            Console.Alignment = LayoutOptions.Center;
+            Console.Alignment = LineAlignment.Left;
             SystemTitle();
 
             Console.PrintButton("Click Me!!", "ABC");

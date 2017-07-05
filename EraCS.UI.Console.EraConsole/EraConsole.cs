@@ -1,111 +1,130 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Xamarin.Forms;
+using EraCS.UI.EraConsole.Annotations;
+using SkiaSharp;
 
 namespace EraCS.UI.EraConsole
 {
-    public sealed class EraConsole : BindableObject, IEraConsole
+    public enum LineAlignment
     {
+        Left, Center, Right
+    }
+
+    public static class ColorTool
+    {
+        public static SKColor ToColor(KnownColor c) => new SKColor((uint)c);
+        public static SKColor ToColor(uint rgba) => new SKColor(rgba);
+    }
+
+    public class EraConsole : IEraConsole
+    {
+        private bool _blankLineFlag;
         private readonly List<ConsoleButtonPart> _activeButtons = new List<ConsoleButtonPart>(100);
-        private readonly StackLayout _stack;
+        private SKColor _consoleTextColor;
+        private SKColor _consoleBackColor;
+        private SKColor _consoleHighlightColor;
+        private float _height;
+        private ConsoleButtonPart _lastCursorOnBtn;
 
-        private bool _blankLineFlag = true;
-
-        public static readonly BindableProperty ConsoleTextColorProperty =
-            BindableProperty.Create(
-                propertyName: nameof(ConsoleTextColor),
-                returnType: typeof(Color),
-                declaringType: typeof(EraConsole),
-                defaultValue: Color.White);
-
-        public static readonly BindableProperty ConsoleBackColorProperty =
-            BindableProperty.Create(
-                propertyName: nameof(ConsoleBackColor),
-                returnType: typeof(Color),
-                declaringType: typeof(EraConsole),
-                defaultValue: Color.Black);
-
-        public static readonly BindableProperty ConsoleHighlightColorProperty =
-            BindableProperty.Create(
-                propertyName: nameof(ConsoleHighlightColor),
-                returnType: typeof(Color),
-                declaringType: typeof(EraConsole),
-                defaultValue: Color.Yellow);
-
-        public EraConsole()
-        {
-            _stack = new StackLayout() {VerticalOptions = LayoutOptions.EndAndExpand};
-            _stack.SetBinding(StackLayout.BackgroundColorProperty, "ConsoleBackColor", BindingMode.OneWay);
-        }
-
-        private StackLayout LastLine => (StackLayout) _stack.Children[_stack.Children.Count - 1];
-
-        public View View => _stack;
-
-        public Color ConsoleTextColor
-        {
-            get => (Color) GetValue(ConsoleTextColorProperty);
-            set => SetValueAndRaise(ConsoleTextColorProperty, value);
-        }
-
-        public Color ConsoleBackColor
-        {
-            get => (Color) GetValue(ConsoleBackColorProperty);
-            set => SetValueAndRaise(ConsoleBackColorProperty, value);
-        }
-
-        public Color ConsoleHighlightColor
-        {
-            get => (Color) GetValue(ConsoleHighlightColorProperty);
-            set => SetValueAndRaise(ConsoleHighlightColorProperty, value);
-        }
+        public List<ConsoleLine> Lines { get; } = new List<ConsoleLine>(100);
+        
+        private ConsoleLine LastLine => Lines[Lines.Count - 1];
 
         public bool SkipPrint { get; set; }
-        public LayoutOptions Alignment { get; set; } = LayoutOptions.Start;
+        public LineAlignment Alignment { get; set; } = LineAlignment.Left;
+
+        public float Height
+        {
+            get => _height;
+            private set
+            {
+                if (value == _height) return;
+                _height = value;
+                OnPropertyChanged();
+            }
+        }
 
         public bool LastLineIsTemporary { get; set; }
-
-        private void SetValueAndRaise(BindableProperty property, object value,
-            [CallerMemberName] string propertyName = "")
-        {
-            SetValue(property, value);
-            OnPropertyChanged(propertyName);
-        }
+        public SKTypeface Typeface { get; set; } = SKTypeface.FromFamilyName("MS Gothic");
 
         private void AddBlankLine()
         {
-            var line = new StackLayout() {HorizontalOptions = Alignment, Orientation = StackOrientation.Horizontal};
-            line.SetBinding(StackLayout.BackgroundColorProperty, "ConsoleBackColor", BindingMode.OneWay);
-            _stack.Children.Add(line);
+            Lines.Add(new ConsoleLine(LineHeight));
         }
 
-        private void AddPart(ConsoleLinePart part)
+        private void AddPart(IConsoleLinePart part)
         {
             if (SkipPrint) return;
 
             if (LastLineIsTemporary)
             {
-                _stack.Children.RemoveAt(_stack.Children.Count - 1);
+                Lines.RemoveAt(Lines.Count - 1);
                 LastLineIsTemporary = false;
             }
 
-            if (_blankLineFlag || _stack.Children.Count == 0)
+            if (_blankLineFlag || Lines.Count == 0)
             {
                 AddBlankLine();
                 _blankLineFlag = false;
             }
 
-            LastLine.Children.Add(part);
+            LastLine.Parts.Add(part);
+            Height = Lines.Count * LineHeight;
+            OnDrawRequested();
         }
 
-        public void OnTextEntered(string value)
+
+
+        public SKColor ConsoleTextColor
         {
-            TextEntered?.Invoke(value);
+            get => _consoleTextColor;
+            set
+            {
+                if (value.Equals(_consoleTextColor)) return;
+                _consoleTextColor = value;
+                OnPropertyChanged();
+            }
         }
+
+        public void SetTextColor(KnownColor c) => ConsoleTextColor = new SKColor((uint) c);
+        public void SetTextColor(uint c) => ConsoleTextColor = new SKColor(c);
+
+        public SKColor ConsoleBackColor
+        {
+            get => _consoleBackColor;
+            set
+            {
+                if (value.Equals(_consoleBackColor)) return;
+                _consoleBackColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void SetBackColor(KnownColor c) => ConsoleBackColor = new SKColor((uint)c);
+        public void SetBackColor(uint c) => ConsoleBackColor = new SKColor(c);
+
+        public SKColor ConsoleHighlightColor
+        {
+            get => _consoleHighlightColor;
+            set
+            {
+                if (value.Equals(_consoleHighlightColor)) return;
+                _consoleHighlightColor = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public void SetHighlightColor(KnownColor c) => ConsoleHighlightColor = new SKColor((uint)c);
+        public void SetHighlightColor(uint c) => ConsoleHighlightColor = new SKColor(c);
+
+        public float LineHeight { get; set; } = 30;
+        public float TextSize { get; set; } = 15;
 
         public event TextEnteredHandler TextEntered;
 
-        public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str));
+        public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str, TextSize, Typeface));
 
         public void PrintLine(string str)
         {
@@ -115,7 +134,7 @@ namespace EraCS.UI.EraConsole
 
         public void PrintButton(string text, string value)
         {
-            var btn = new ConsoleButtonPart(text, value, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
+            var btn = new ConsoleButtonPart(text, TextSize, Typeface, value, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
             _activeButtons.Add(btn);
             AddPart(btn);
         }
@@ -124,7 +143,7 @@ namespace EraCS.UI.EraConsole
         {
             if (LastLineIsTemporary)
             {
-                _stack.Children.RemoveAt(_stack.Children.Count - 1);
+                Lines.RemoveAt(Lines.Count - 1);
                 LastLineIsTemporary = false;
             }
 
@@ -143,7 +162,7 @@ namespace EraCS.UI.EraConsole
         {
             for (int i = 0; i < count; i++)
             {
-                _stack.Children.RemoveAt(_stack.Children.Count - 1);
+                Lines.RemoveAt(Lines.Count - 1);
             }
 
             LastLineIsTemporary = false;
@@ -153,6 +172,80 @@ namespace EraCS.UI.EraConsole
         {
             foreach (var com in _activeButtons) com.Clickable = false;
             _activeButtons.Clear();
+        }
+
+        public virtual void Draw(SKCanvas c)
+        {
+            c.DrawColor(ConsoleBackColor);
+
+            float y = LineHeight / 2;
+
+            foreach (var line in Lines)
+            {
+                line.DrawTo(c, y);
+                y += LineHeight;
+            }
+        }
+
+        public event Action DrawRequested;
+
+        protected virtual void OnDrawRequested()
+        {
+            DrawRequested?.Invoke();
+        }
+
+        private IConsoleLinePart GetPart(float x, float y)
+        {
+            foreach (var line in Lines)
+            {
+                y -= line.Height;
+
+                if (y > 0)
+                {
+                    continue;
+                }
+
+                return line.GetPart(x);
+            }
+
+            return null;
+        }
+
+        public void OnCursorMoved(float x, float y)
+        {
+            if(x < 0) throw new ArgumentOutOfRangeException(nameof(x));
+            if(y < 0) throw new ArgumentOutOfRangeException(nameof(y));
+
+            if (_lastCursorOnBtn != null)
+                _lastCursorOnBtn.CursorOn = false;
+
+            if (GetPart(x, y) is ConsoleButtonPart btnPart)
+            {
+                btnPart.CursorOn = true;
+                _lastCursorOnBtn = btnPart;
+            }
+
+            OnDrawRequested();
+        }
+
+        public void OnClicked(float x, float y)
+        {
+            OnCursorMoved(x, y);
+
+            _lastCursorOnBtn?.ClickAction();
+        }
+
+        public void OnTextEntered(string value)
+        {
+            TextEntered?.Invoke(value);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
