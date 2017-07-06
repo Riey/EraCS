@@ -1,6 +1,6 @@
 $CoreVersion = "1.2.0.1"
 $FrontEndWpfVersion = "1.2.1.0"
-$EraConsoleVersion = "1.2.0.0"
+$EraConsoleVersion = "1.2.1.0"
 $XamarinVersion = "2.3.4.224"
 
 $PropertiesArg = "xamarin_version=$XamarinVersion;core_version=$CoreVersion;frontend_wpf_version=$FrontEndWpfVersion;console_version=$EraConsoleVersion" 

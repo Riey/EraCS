@@ -28,9 +28,9 @@ namespace EraCS.UI.EraConsole
         private float _height;
         private ConsoleButtonPart _lastCursorOnBtn;
 
-        public List<ConsoleLine> Lines { get; } = new List<ConsoleLine>(100);
+        public List<IConsoleLine> Lines { get; } = new List<IConsoleLine>(100);
         
-        private ConsoleLine LastLine => Lines[Lines.Count - 1];
+        private ConsoleLine LastLine { get; set; }
 
         public bool SkipPrint { get; set; }
         public LineAlignment Alignment { get; set; } = LineAlignment.Left;
@@ -51,7 +51,8 @@ namespace EraCS.UI.EraConsole
 
         private void AddBlankLine()
         {
-            Lines.Add(new ConsoleLine(LineHeight));
+            LastLine = new ConsoleLine(LineHeight);
+            Lines.Add(LastLine);
         }
 
         private void AddPart(IConsoleLinePart part)
