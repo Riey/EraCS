@@ -64,15 +64,6 @@ namespace EraCS.UI.FrontEnd.Wpf
             var p = e.GetPosition(ConsoleView);
             Console?.OnCursorMoved((float)p.X, (float)p.Y);
         }
-
-        private void ConsoleTb_OnKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.IsDown && e.Key == Key.Enter)
-            {
-                Console.OnTextEntered(ConsoleTb.Text);
-                ConsoleTb.Text = "";
-            }
-        }
     }
 
     public class FloatToDoubleConveter : IValueConverter

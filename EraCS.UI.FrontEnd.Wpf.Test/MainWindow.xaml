@@ -7,7 +7,18 @@
         xmlns:wpf="clr-namespace:EraCS.UI.FrontEnd.Wpf;assembly=EraCS.UI.FrontEnd.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
+    <Window.Resources>
+        <wpf:SkColorConverter x:Key="SkColorConverter"/>
+        <wpf:LineHeightToMarginConverter x:Key="LineHeightToMarginConverter"/>
+    </Window.Resources>
+    <Window.Background>
+        <Binding Path="ConsoleBackColor" Converter="{StaticResource SkColorConverter}"/>
+    </Window.Background>
+    <StackPanel VerticalAlignment="Bottom">
         <wpf:ConsoleControl Name="ConsoleControl"/>
-    </Grid>
+        <TextBox Name="ConsoleTb" KeyDown="ConsoleTb_OnKeyDown"
+                 Margin="{Binding LineHeight, Converter={StaticResource LineHeightToMarginConverter}}"
+                 Background="{Binding ConsoleBackColor, Converter={StaticResource SkColorConverter}}"
+                 Foreground="{Binding ConsoleTextColor, Converter={StaticResource SkColorConverter}}"/>
+    </StackPanel>
 </Window>

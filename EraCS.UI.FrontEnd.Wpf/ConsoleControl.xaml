@@ -16,16 +16,9 @@
     <UserControl.Background>
         <Binding Path="ConsoleBackColor" Converter="{StaticResource SkColorConverter}"/>
     </UserControl.Background>
-    <StackPanel
-                VerticalAlignment="Bottom">
-        <skia:SKElement Name="ConsoleView" 
-                        Height="{Binding Height, Converter={StaticResource FloatToDoubleConveter}}"
-                        PaintSurface="ConsoleView_OnPaintSurface"
-                        MouseLeftButtonDown="ConsoleView_OnMouseLeftButtonDown"
-                        MouseMove="ConsoleView_OnMouseMove"/>
-        <TextBox Name="ConsoleTb"
-                 Background="#00000000" KeyDown="ConsoleTb_OnKeyDown"
-                 Margin="{Binding LineHeight, Converter={StaticResource LineHeightToMarginConverter}}"
-                 Foreground="{Binding ConsoleTextColor, Converter={StaticResource SkColorConverter}}"/>
-    </StackPanel>
+    <skia:SKElement Name="ConsoleView" 
+                    Height="{Binding Height, Converter={StaticResource FloatToDoubleConveter}}"
+                    PaintSurface="ConsoleView_OnPaintSurface"
+                    MouseLeftButtonDown="ConsoleView_OnMouseLeftButtonDown"
+                    MouseMove="ConsoleView_OnMouseMove"/>
 </UserControl>
