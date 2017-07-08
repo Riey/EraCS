@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using EraCS.UI.EraConsole.Annotations;
@@ -28,7 +30,7 @@ namespace EraCS.UI.EraConsole
         private float _height;
         private ConsoleButtonPart _lastCursorOnBtn;
 
-        public List<IConsoleLine> Lines { get; } = new List<IConsoleLine>(100);
+        public IList<IConsoleLine> Lines { get; }
         
         private ConsoleLine LastLine { get; set; }
 
@@ -48,6 +50,20 @@ namespace EraCS.UI.EraConsole
 
         public bool LastLineIsTemporary { get; set; }
         public SKTypeface Typeface { get; set; } = SKTypeface.FromFamilyName("MS Gothic");
+
+        public EraConsole()
+        {
+            var lines = new ObservableCollection<IConsoleLine>();
+            Lines = lines;
+
+            lines.CollectionChanged += LinesOnCollectionChanged;
+        }
+
+        private void LinesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            Height = Lines.Count * LineHeight;
+            OnDrawRequested();
+        }
 
         private void AddBlankLine()
         {
@@ -72,8 +88,6 @@ namespace EraCS.UI.EraConsole
             }
 
             LastLine.Parts.Add(part);
-            Height = Lines.Count * LineHeight;
-            OnDrawRequested();
         }
 
 
@@ -225,8 +239,6 @@ namespace EraCS.UI.EraConsole
                 btnPart.CursorOn = true;
                 _lastCursorOnBtn = btnPart;
             }
-
-            OnDrawRequested();
         }
 
         public void OnClicked(float x, float y)
