@@ -34,6 +34,22 @@ namespace EraCS.UI.EraConsole
             canvas.DrawText(Text, x, y, Paint);
         }
 
+        public virtual void OnCursorOver(float x, float y)
+        {
+        }
+
+        public virtual void OnCursorEntered()
+        {
+        }
+
+        public virtual void OnCursorExited()
+        {
+        }
+
+        public virtual void OnClicked(float x, float y)
+        {
+        }
+
         public float Width => Paint.MeasureText(Text);
     }
 
@@ -67,6 +83,24 @@ namespace EraCS.UI.EraConsole
         public bool CursorOn { get; set; }
 
         public bool Clickable { get; set; } = true;
+
+        public override void OnClicked(float x, float y)
+        {
+            base.OnClicked(x, y);
+            ClickAction();
+        }
+
+        public override void OnCursorEntered()
+        {
+            base.OnCursorEntered();
+            CursorOn = true;
+        }
+
+        public override void OnCursorExited()
+        {
+            base.OnCursorExited();
+            CursorOn = false;
+        }
     }
 
     public class ConsoleImagePart : IConsoleLinePart
@@ -81,6 +115,22 @@ namespace EraCS.UI.EraConsole
         public void DrawTo(SKCanvas canvas, float x, float y)
         {
             canvas.DrawImage(Image, x, y);
+        }
+
+        public virtual void OnCursorOver(float x, float y)
+        {
+        }
+
+        public virtual void OnCursorEntered()
+        {
+        }
+
+        public virtual void OnCursorExited()
+        {
+        }
+
+        public virtual void OnClicked(float x, float y)
+        {
         }
 
         public float Width => Image.Width;

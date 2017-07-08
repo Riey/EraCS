@@ -1,11 +1,12 @@
-﻿using System;
+﻿using EraCS.UI.EraConsole.Annotations;
+using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using EraCS.UI.EraConsole.Annotations;
-using SkiaSharp;
 
 namespace EraCS.UI.EraConsole
 {
@@ -28,7 +29,7 @@ namespace EraCS.UI.EraConsole
         private SKColor _consoleBackColor;
         private SKColor _consoleHighlightColor;
         private float _height;
-        private ConsoleButtonPart _lastCursorOnBtn;
+        private IConsoleLinePart _lastCursorOnPart;
 
         public IList<IConsoleLine> Lines { get; }
         
@@ -42,6 +43,7 @@ namespace EraCS.UI.EraConsole
             get => _height;
             private set
             {
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
                 if (value == _height) return;
                 _height = value;
                 OnPropertyChanged();
@@ -61,7 +63,7 @@ namespace EraCS.UI.EraConsole
 
         private void LinesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            Height = Lines.Count * LineHeight;
+            Height = Lines.Sum(l => l.Height);
             OnDrawRequested();
         }
 
@@ -231,13 +233,17 @@ namespace EraCS.UI.EraConsole
             if(x < 0) throw new ArgumentOutOfRangeException(nameof(x));
             if(y < 0) throw new ArgumentOutOfRangeException(nameof(y));
 
-            if (_lastCursorOnBtn != null)
-                _lastCursorOnBtn.CursorOn = false;
+            var part = GetPart(x, y);
 
-            if (GetPart(x, y) is ConsoleButtonPart btnPart)
+            if (_lastCursorOnPart != part)
             {
-                btnPart.CursorOn = true;
-                _lastCursorOnBtn = btnPart;
+                _lastCursorOnPart?.OnCursorExited();
+                part?.OnCursorEntered();
+                _lastCursorOnPart = part;
+            }
+            else
+            {
+                part?.OnCursorOver(x, y);
             }
         }
 
@@ -245,7 +251,7 @@ namespace EraCS.UI.EraConsole
         {
             OnCursorMoved(x, y);
 
-            _lastCursorOnBtn?.ClickAction();
+            _lastCursorOnPart?.OnClicked(x, y);
         }
 
         public void OnTextEntered(string value)

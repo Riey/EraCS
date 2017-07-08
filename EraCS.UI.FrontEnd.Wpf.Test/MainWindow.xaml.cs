@@ -27,6 +27,7 @@ namespace EraCS.UI.FrontEnd.Wpf.Test
             if (e.IsDown && e.Key == Key.Enter)
             {
                 ConsoleControl.Console.OnTextEntered(ConsoleTb.Text);
+                ConsoleTb.Text = "";
             }
         }
     }
