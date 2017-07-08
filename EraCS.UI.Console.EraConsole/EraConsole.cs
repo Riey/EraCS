@@ -195,12 +195,12 @@ namespace EraCS.UI.EraConsole
         {
             c.DrawColor(ConsoleBackColor);
 
-            float y = LineHeight / 2;
+            float y = 0;
 
             foreach (var line in Lines)
             {
                 line.DrawTo(c, y);
-                y += LineHeight;
+                y += line.Height;
             }
         }
 

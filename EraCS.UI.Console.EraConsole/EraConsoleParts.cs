@@ -5,6 +5,8 @@ namespace EraCS.UI.EraConsole
 {
     public class ConsoleStringPart : IConsoleLinePart
     {
+        protected readonly float textHeight;
+
         public ConsoleStringPart(SKColor textColor, string text, float textSize, SKTypeface typeface)
         {
             TextColor = textColor;
@@ -20,6 +22,9 @@ namespace EraCS.UI.EraConsole
                 TextSize = textSize,
                 Typeface = typeface
             };
+
+            textHeight = Paint.FontMetrics.Ascent;
+            Width = Paint.MeasureText(text);
         }
 
         protected SKPaint Paint { get; }
@@ -31,7 +36,7 @@ namespace EraCS.UI.EraConsole
         public void DrawTo(SKCanvas canvas, float x, float y)
         {
             Paint.Color = GetTextColor();
-            canvas.DrawText(Text, x, y, Paint);
+            canvas.DrawText(Text, x, y - textHeight, Paint);
         }
 
         public virtual void OnCursorOver(float x, float y)
@@ -50,7 +55,7 @@ namespace EraCS.UI.EraConsole
         {
         }
 
-        public float Width => Paint.MeasureText(Text);
+        public float Width { get; }
     }
 
     public class ConsoleButtonPart : ConsoleStringPart
