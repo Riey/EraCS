@@ -1,5 +1,5 @@
 $CoreVersion = "1.2.0.1"
-$FrontEndWpfVersion = "1.2.1.0"
+$FrontEndWpfVersion = "1.2.1.1"
 $EraConsoleVersion = "1.2.1.0"
 $XamarinVersion = "2.3.4.224"
 
