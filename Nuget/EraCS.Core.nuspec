@@ -13,7 +13,6 @@
     <copyright>Copyright 2017</copyright>
     <tags>EraCS</tags>
     <dependencies>
-      <dependency id="Xamarin.Forms" version="$xamarin_version$" />
       <dependency id="SkiaSharp" version="1.58.1" />
       <dependency id="Newtonsoft.Json" version="10.0.3" />
     </dependencies>
