@@ -51,6 +51,10 @@ namespace EraCS.Core.Test.Program
             Console.Alignment = LineAlignment.Left;
             SystemTitle();
 
+            Console.PrintLine("Wait anykey test");
+            await WaitAnyKeyAsync();
+            Console.NewLine();
+
             Console.PrintButton("Click Me!!", "ABC");
             Console.NewLine();
 

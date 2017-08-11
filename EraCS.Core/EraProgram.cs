@@ -39,6 +39,7 @@ namespace EraCS
             VarData = varData;
 
             console.TextEntered += OnTextEntered;
+            console.Clicked += () => OnTextEntered(null);
         }
 
         // ReSharper disable once InconsistentNaming
@@ -64,6 +65,8 @@ namespace EraCS
                     _lastInputNumber = num;
                     break;
                 case InputType.STR:
+                    if (value == null) return;
+
                     _lastInputValue = value;
                     break;
             }

@@ -31,6 +31,12 @@ namespace EraCS.UI.EraConsole
         private float _height;
         private IConsoleLinePart _lastCursorOnPart;
 
+
+        public event TextEnteredHandler TextEntered;
+        public event Action Clicked;
+        public event Action DrawRequested;
+
+
         public IList<IConsoleLine> Lines { get; }
         
         private ConsoleLine LastLine { get; set; }
@@ -139,8 +145,6 @@ namespace EraCS.UI.EraConsole
         public float LineHeight { get; set; } = 30;
         public float TextSize { get; set; } = 15;
 
-        public event TextEnteredHandler TextEntered;
-
         public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str, TextSize, Typeface));
 
         public void PrintLine(string str)
@@ -204,8 +208,6 @@ namespace EraCS.UI.EraConsole
             }
         }
 
-        public event Action DrawRequested;
-
         protected virtual void OnDrawRequested()
         {
             DrawRequested?.Invoke();
@@ -252,6 +254,7 @@ namespace EraCS.UI.EraConsole
             OnCursorMoved(x, y);
 
             _lastCursorOnPart?.OnClicked(x, y);
+            Clicked?.Invoke();
         }
 
         public void OnTextEntered(string value)

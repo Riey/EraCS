@@ -14,6 +14,7 @@ namespace EraCS
         float Height { get; }
 
         event TextEnteredHandler TextEntered;
+        event Action Clicked;
         event Action DrawRequested;
 
         void OnCursorMoved(float x, float y);
