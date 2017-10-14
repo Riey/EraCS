@@ -15,12 +15,6 @@ namespace EraCS.UI.EraConsole
         Left, Center, Right
     }
 
-    public static class ColorTool
-    {
-        public static SKColor ToColor(KnownColor c) => new SKColor((uint)c);
-        public static SKColor ToColor(uint rgba) => new SKColor(rgba);
-    }
-
     public class EraConsole : IEraConsole
     {
         private bool _blankLineFlag;
@@ -56,48 +50,6 @@ namespace EraCS.UI.EraConsole
             }
         }
 
-        public bool LastLineIsTemporary { get; set; }
-        public SKTypeface Typeface { get; set; } = SKTypeface.FromFamilyName("MS Gothic");
-
-        public EraConsole()
-        {
-            var lines = new ObservableCollection<IConsoleLine>();
-            Lines = lines;
-
-            lines.CollectionChanged += LinesOnCollectionChanged;
-        }
-
-        private void LinesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
-        {
-            Height = Lines.Sum(l => l.Height);
-            OnDrawRequested();
-        }
-
-        private void AddBlankLine()
-        {
-            LastLine = new ConsoleLine(LineHeight);
-            Lines.Add(LastLine);
-        }
-
-        private void AddPart(IConsoleLinePart part)
-        {
-            if (SkipPrint) return;
-
-            if (LastLineIsTemporary)
-            {
-                Lines.RemoveAt(Lines.Count - 1);
-                LastLineIsTemporary = false;
-            }
-
-            if (_blankLineFlag || Lines.Count == 0)
-            {
-                AddBlankLine();
-                _blankLineFlag = false;
-            }
-
-            LastLine.Parts.Add(part);
-        }
-
 
 
         public SKColor ConsoleTextColor
@@ -111,7 +63,7 @@ namespace EraCS.UI.EraConsole
             }
         }
 
-        public void SetTextColor(KnownColor c) => ConsoleTextColor = new SKColor((uint) c);
+        public void SetTextColor(KnownColor c) => ConsoleTextColor = new SKColor((uint)c);
         public void SetTextColor(uint c) => ConsoleTextColor = new SKColor(c);
 
         public SKColor ConsoleBackColor
@@ -144,6 +96,48 @@ namespace EraCS.UI.EraConsole
 
         public float LineHeight { get; set; } = 30;
         public float TextSize { get; set; } = 15;
+
+        public bool LastLineIsTemporary { get; set; }
+        public SKTypeface Typeface { get; set; } = SKTypeface.FromFamilyName("MS Gothic");
+
+        public EraConsole()
+        {
+            var lines = new ObservableCollection<IConsoleLine>();
+            Lines = lines;
+
+            lines.CollectionChanged += LinesOnCollectionChanged;
+        }
+
+        private void LinesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            Height = Lines.Sum(l => l.Height);
+            OnDrawRequested();
+        }
+
+        protected void AddBlankLine()
+        {
+            LastLine = new ConsoleLine(LineHeight);
+            Lines.Add(LastLine);
+        }
+
+        protected void AddPart(IConsoleLinePart part)
+        {
+            if (SkipPrint) return;
+
+            if (LastLineIsTemporary)
+            {
+                Lines.RemoveAt(Lines.Count - 1);
+                LastLineIsTemporary = false;
+            }
+
+            if (_blankLineFlag || Lines.Count == 0)
+            {
+                AddBlankLine();
+                _blankLineFlag = false;
+            }
+
+            LastLine.Parts.Add(part);
+        }
 
         public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str, TextSize, Typeface));
 
