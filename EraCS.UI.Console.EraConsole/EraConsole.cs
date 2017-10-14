@@ -1,4 +1,4 @@
-﻿using EraCS.UI.EraConsole.Annotations;
+﻿using JetBrains.Annotations;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;

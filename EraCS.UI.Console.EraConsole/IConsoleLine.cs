@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using SkiaSharp;
+﻿using SkiaSharp;
 
-namespace EraCS.UI
+namespace EraCS.UI.EraConsole
 {
     public interface IConsoleLine
     {

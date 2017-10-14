@@ -62,12 +62,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UI\IConsoleLine.cs" />
     <Compile Include="IEraConsole.cs" />
     <Compile Include="InputRequest.cs" />
     <Compile Include="EraProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\IConsoleLinePart.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>

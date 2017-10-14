@@ -14,7 +14,7 @@ namespace EraCS
         Waiting
     }
 
-    public abstract class EraProgram<TVariable, TConsole>
+    public abstract class EraProgram<TConsole, TVariable>
         where TConsole : IEraConsole
     {
         protected readonly Stopwatch timer = new Stopwatch();
@@ -66,9 +66,10 @@ namespace EraCS
                     break;
                 case InputType.STR:
                     if (value == null) return;
-
                     _lastInputValue = value;
                     break;
+                default:
+                    throw new ArgumentException("Invalid InputType");
             }
 
             currentInputReq = null;

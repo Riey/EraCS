@@ -4,18 +4,13 @@ using EraCS.UI.EraConsole;
 namespace EraCS.Core.Test.Program
 {
 
-    public class TestProgram : EraProgram<TestVariableData, EraConsole>
+    public class TestProgram : EraProgram<EraConsole, TestVariableData>
     {
-        public TestProgram() 
-            : base(
-                  new EraConsole
-                  {
-                      ConsoleTextColor = ColorTool.ToColor(KnownColor.White),
-                      ConsoleBackColor = ColorTool.ToColor(KnownColor.Black),
-                      ConsoleHighlightColor = ColorTool.ToColor(KnownColor.Yellow)
-                  } , 
-                  new TestVariableData())
+        public TestProgram() : base(new EraConsole(), new TestVariableData())
         {
+            Console.SetBackColor(KnownColor.Black);
+            Console.SetHighlightColor(KnownColor.Yellow);
+            Console.SetTextColor(KnownColor.White);
         }
 
         public void SystemTitle()
@@ -59,8 +54,8 @@ namespace EraCS.Core.Test.Program
             Console.NewLine();
 
             Console.PrintLine("Please input");
-            
-            var input = await WaitStringAsync(6000, defaultValue: "Time over",
+
+            string input = await WaitStringAsync(6000, defaultValue: "Time over",
                 tickAction: (left) =>
                 {
                     Console.PrintLine($"Time {6000 - left}/6000");
