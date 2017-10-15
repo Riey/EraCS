@@ -23,6 +23,8 @@ namespace EraCS.Core.Test.Program
                 Console.Print(str);
             }
 
+            Console.Alignment = LineAlignment.Center;
+
             PrintWith("R", KnownColor.Red);
             PrintWith("A", KnownColor.OrangeRed);
             PrintWith("I", KnownColor.Yellow);
@@ -35,9 +37,11 @@ namespace EraCS.Core.Test.Program
             Console.SetTextColor(KnownColor.White);
 
             Console.NewLine();
+            Console.Alignment = LineAlignment.Left;
             Console.NewLine();
-
             Console.PrintLine("Hello world!");
+
+            Console.Alignment = LineAlignment.Right;
             Console.PrintLine($"Current time: {VarData.Time}");
         }
 

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using SkiaSharp.Views.WPF;
 
 namespace EraCS.UI.FrontEnd.Wpf
 {
@@ -63,51 +57,6 @@ namespace EraCS.UI.FrontEnd.Wpf
         {
             var p = e.GetPosition(ConsoleView);
             Console?.OnCursorMoved((float)p.X, (float)p.Y);
-        }
-    }
-
-    public class FloatToDoubleConveter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is float f) return (double)f;
-
-            throw new NotSupportedException();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
-    public class SkColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is SKColor c) return new SolidColorBrush(c.ToColor());
-
-            throw new NotSupportedException();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
-        }
-    }
-
-    public class LineHeightToMarginConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is float f) return new Thickness(0, f / 2, 0, 0);
-
-            throw new NotSupportedException();
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
     }
 }

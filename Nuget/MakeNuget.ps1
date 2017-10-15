@@ -1,6 +1,6 @@
 $CoreVersion = "1.2.3.0"
-$FrontEndWpfVersion = "1.2.1.2"
-$EraConsoleVersion = "1.2.7.0"
+$FrontEndWpfVersion = "1.2.2.0"
+$EraConsoleVersion = "1.2.8.0"
 
 $PropertiesArg = "core_version=$CoreVersion;frontend_wpf_version=$FrontEndWpfVersion;console_version=$EraConsoleVersion" 
 

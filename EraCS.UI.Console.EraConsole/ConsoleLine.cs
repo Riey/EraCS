@@ -1,14 +1,17 @@
 ﻿using SkiaSharp;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EraCS.UI.EraConsole
 {
     public class ConsoleLine : IConsoleLine
     {
+        protected readonly LineAlignment alignment;
         public List<IConsoleLinePart> Parts { get; }
 
-        public ConsoleLine(float lineHeight)
+        public ConsoleLine(LineAlignment alignment, float lineHeight)
         {
+            this.alignment = alignment;
             Height = lineHeight;
             Parts = new List<IConsoleLinePart>(10);
         }
@@ -29,7 +32,14 @@ namespace EraCS.UI.EraConsole
 
         public virtual void DrawTo(SKCanvas canvas, float y)
         {
+            float width = Parts.Sum(p => p.Width);
+
             float x = 0;
+
+            if (alignment == LineAlignment.Center)
+                x = (canvas.DeviceClipBounds.Width - width) / 2;
+            else if (alignment == LineAlignment.Right)
+                x = canvas.DeviceClipBounds.Width - width;
 
             foreach (var part in Parts)
             {

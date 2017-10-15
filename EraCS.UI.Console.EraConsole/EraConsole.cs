@@ -35,7 +35,6 @@ namespace EraCS.UI.EraConsole
         
         private ConsoleLine LastLine { get; set; }
 
-        public bool SkipPrint { get; set; }
         public LineAlignment Alignment { get; set; } = LineAlignment.Left;
 
         public float Height
@@ -116,14 +115,12 @@ namespace EraCS.UI.EraConsole
 
         protected void AddBlankLine()
         {
-            LastLine = new ConsoleLine(LineHeight);
+            LastLine = new ConsoleLine(Alignment, LineHeight);
             Lines.Add(LastLine);
         }
 
         protected void AddPart(IConsoleLinePart part)
         {
-            if (SkipPrint) return;
-
             if (LastLineIsTemporary)
             {
                 Lines.RemoveAt(Lines.Count - 1);
