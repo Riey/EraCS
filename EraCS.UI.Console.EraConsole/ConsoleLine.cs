@@ -6,6 +6,8 @@ namespace EraCS.UI.EraConsole
 {
     public class ConsoleLine : IConsoleLine
     {
+        private float _prevX = 0;
+
         protected readonly LineAlignment alignment;
         public List<IConsoleLinePart> Parts { get; }
 
@@ -22,7 +24,7 @@ namespace EraCS.UI.EraConsole
             {
                 x -= part.Width;
 
-                if(x > 0) continue;
+                if(x > _prevX) continue;
 
                 return part;
             }
@@ -40,6 +42,8 @@ namespace EraCS.UI.EraConsole
                 x = (canvas.DeviceClipBounds.Width - width) / 2;
             else if (alignment == LineAlignment.Right)
                 x = canvas.DeviceClipBounds.Width - width;
+
+            _prevX = x;
 
             foreach (var part in Parts)
             {
