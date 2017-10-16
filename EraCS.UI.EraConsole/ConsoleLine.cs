@@ -20,10 +20,13 @@ namespace EraCS.UI.EraConsole
 
         public IConsoleLinePart GetPart(float x)
         {
+            if (x < _prevX)
+                return null;
+
             foreach (var part in Parts)
             {
                 x -= part.Width;
-
+                
                 if(x > _prevX) continue;
 
                 return part;

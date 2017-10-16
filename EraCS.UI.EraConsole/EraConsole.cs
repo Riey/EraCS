@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using SkiaSharp;
+﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -238,6 +237,8 @@ namespace EraCS.UI.EraConsole
             {
                 part?.OnCursorOver(x, y);
             }
+
+            OnDrawRequested();
         }
 
         public void OnClicked(float x, float y)
@@ -246,6 +247,7 @@ namespace EraCS.UI.EraConsole
 
             _lastCursorOnPart?.OnClicked(x, y);
             Clicked?.Invoke();
+            OnDrawRequested();
         }
 
         public void OnTextEntered(string value)
@@ -254,8 +256,7 @@ namespace EraCS.UI.EraConsole
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

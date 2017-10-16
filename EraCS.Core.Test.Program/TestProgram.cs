@@ -61,13 +61,8 @@ namespace EraCS.Core.Test.Program
 
             Console.PrintLine("Please input");
 
-            string input = await WaitStringAsync(6000, defaultValue: "Time over",
-                tickAction: (left) =>
-                {
-                    Console.PrintLine($"Time {6000 - left}/6000");
-                    Console.LastLineIsTemporary = true;
-                });
-            
+            string input = await WaitStringAsync();
+
             Console.DeleteLine(2);
             Console.NewLine();
             Console.NewLine();

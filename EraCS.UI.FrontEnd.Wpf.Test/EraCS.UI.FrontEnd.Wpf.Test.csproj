@@ -53,6 +53,26 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,12 +142,12 @@
       <Name>EraCS.Core.Test.Program</Name>
     </ProjectReference>
     <ProjectReference Include="..\EraCS.Core\EraCS.Core.csproj">
-      <Project>{f044d821-c9e9-4df7-9b37-dfe2be4dd711}</Project>
+      <Project>{d5802d09-2a16-4b0c-8b39-780b6209864e}</Project>
       <Name>EraCS.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EraCS.UI.Console.EraConsole\EraCS.UI.Console.EraConsole.csproj">
-      <Project>{48faea71-96f3-4f48-a7f1-4e06e519b2fe}</Project>
-      <Name>EraCS.UI.Console.EraConsole</Name>
+    <ProjectReference Include="..\EraCS.UI.EraConsole\EraCS.UI.EraConsole.csproj">
+      <Project>{ef30a55d-7caf-46f5-9379-f787992bc234}</Project>
+      <Name>EraCS.UI.EraConsole</Name>
     </ProjectReference>
     <ProjectReference Include="..\EraCS.UI.FrontEnd.Wpf\EraCS.UI.FrontEnd.Wpf.csproj">
       <Project>{5bb11c03-3739-46d1-9736-9b70f00e80d0}</Project>
