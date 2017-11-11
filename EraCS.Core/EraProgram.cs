@@ -93,13 +93,23 @@ namespace EraCS
         public void Save(Stream output, bool leaveOpen)
         {
             using (var writer = new StreamWriter(output, Encoding.UTF8, 8192, leaveOpen))
-                writer.Write(JsonConvert.SerializeObject(VarData, SerializerSettings));
+                writer.Write(Serialize());
+        }
+
+        public string Serialize()
+        {
+            return JsonConvert.SerializeObject(VarData, Formatting.Indented, SerializerSettings);
         }
 
         public void Load(Stream input, bool leaveOpen)
         {
             using (var reader = new StreamReader(input, Encoding.UTF8, leaveOpen))
-                VarData = JsonConvert.DeserializeObject<TVariable>(reader.ReadToEnd(), SerializerSettings);
+                DeSerialize(reader.ReadToEnd());
+        }
+
+        public void DeSerialize(string savString)
+        {
+            VarData = JsonConvert.DeserializeObject<TVariable>(savString, SerializerSettings);
         }
 
         protected const int WAIT_TIMEOUT = 150;
