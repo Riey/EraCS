@@ -9,6 +9,7 @@ namespace EraCS
 {
     public enum ProgramStatus
     {
+        Quit,
         Idle,
         Running,
         Waiting
@@ -22,15 +23,19 @@ namespace EraCS
         protected readonly Stopwatch timer = new Stopwatch();
         protected InputRequest currentInputReq;
 
+        protected Task ScriptTask { get; private set; }
+
         public TConsole Console { get; }
         public TVariable VarData { get; private set; }
 
         public ProgramStatus Status =>
-            timer.IsRunning
-                ? IsWaiting
-                    ? ProgramStatus.Waiting
-                    : ProgramStatus.Running
-                : ProgramStatus.Idle;
+            ScriptTask == null
+                ? ProgramStatus.Idle
+                : ScriptTask.IsCompleted
+                    ? ProgramStatus.Quit
+                    : IsWaiting
+                        ? ProgramStatus.Waiting
+                        : ProgramStatus.Running;
 
         public bool IsWaiting => currentInputReq != null;
         public long CurrentTime => timer.ElapsedMilliseconds;
@@ -82,15 +87,15 @@ namespace EraCS
         public void Start()
         {
             timer.Start();
-            
-            var scriptTask = Task.Factory.StartNew(RunScript, TaskCreationOptions.LongRunning);
 
-            ManageScriptAsync(scriptTask);
+            ScriptTask = Task.Factory.StartNew(RunScript, TaskCreationOptions.LongRunning);
+
+            ManageScriptAsync();
         }
 
-        private async void ManageScriptAsync(Task scriptTask)
+        private async void ManageScriptAsync()
         {
-            while(!scriptTask.IsCompleted)
+            while(!ScriptTask.IsCompleted)
             {
                 if(Console.NeedRedraw)
                 {
@@ -104,6 +109,10 @@ namespace EraCS
             {
                 Console.OnDrawRequested();
             }
+
+            ScriptTask = null;
+            timer.Stop();
+            timer.Reset();
         }
 
         protected virtual JsonSerializerSettings SerializerSettings { get; } =
