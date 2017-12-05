@@ -49,14 +49,18 @@ namespace EraCS.UI.FrontEnd.Wpf
 
         private void ConsoleView_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var p = e.GetPosition(ConsoleView);
-            Console?.OnClicked((float)p.X, (float)p.Y);
+            Point p = e.GetPosition(ConsoleView);
+
+            float rate = ConsoleView.CanvasSize.Width / (float)ConsoleView.ActualWidth;
+            Console?.OnClicked((float)p.X * rate, (float)p.Y * rate);
         }
 
         private void ConsoleView_OnMouseMove(object sender, MouseEventArgs e)
         {
-            var p = e.GetPosition(ConsoleView);
-            Console?.OnCursorMoved((float)p.X, (float)p.Y);
+            Point p = e.GetPosition(ConsoleView);
+
+            float rate = ConsoleView.CanvasSize.Width / (float)ConsoleView.ActualWidth;
+            Console?.OnCursorMoved((float)p.X * rate, (float)p.Y * rate);
         }
     }
 }

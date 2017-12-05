@@ -41,9 +41,8 @@ namespace EraCS
             console.TextEntered += OnTextEntered;
             console.Clicked += () => OnTextEntered(null);
         }
-
-        // ReSharper disable once InconsistentNaming
-        protected abstract void RunScriptAsync();
+        
+        protected abstract void RunScript();
 
         private string _lastInputValue;
         private int _lastInputNumber;
@@ -78,8 +77,28 @@ namespace EraCS
         public void Start()
         {
             timer.Start();
+            
+            var scriptTask = Task.Factory.StartNew(RunScript, TaskCreationOptions.LongRunning);
 
-            RunScriptAsync();
+            ManageScriptAsync(scriptTask);
+        }
+
+        private async void ManageScriptAsync(Task scriptTask)
+        {
+            while(!scriptTask.IsCompleted)
+            {
+                if(Console.NeedRedraw)
+                {
+                    Console.OnDrawRequested();
+                }
+
+                await Task.Delay(WAIT_TIMEOUT);
+            }
+
+            if (Console.NeedRedraw)
+            {
+                Console.OnDrawRequested();
+            }
         }
 
         protected virtual JsonSerializerSettings SerializerSettings { get; } =
@@ -112,47 +131,47 @@ namespace EraCS
             VarData = JsonConvert.DeserializeObject<TVariable>(savString, SerializerSettings);
         }
 
-        protected const int WAIT_TIMEOUT = 150;
+        protected const int WAIT_TIMEOUT = 50;
 
-        public async Task WaitAnyKeyAsync()
+        public void WaitAnyKey()
         {
-            await WaitAsync(new InputRequest(InputType.ANYKEY));
+            Wait(new InputRequest(InputType.ANYKEY));
         }
 
-        public async Task<int> WaitNumberAsync(bool isOneInput = false)
+        public int WaitNumber(bool isOneInput = false)
         {
-            await WaitAsync(new InputRequest(InputType.INT, isOneInput));
+            Wait(new InputRequest(InputType.INT, isOneInput));
             return _lastInputNumber;
         }
 
-        public async Task<int> WaitNumberAsync(long endTime, int? defaultValue = null, bool isOneInput = false,
+        public int WaitNumber(long endTime, int? defaultValue = null, bool isOneInput = false,
             Action<long> tickAction = null)
         {
-            await WaitAsync(new InputRequest(InputType.INT, endTime, defaultValue?.ToString(), isOneInput), tickAction);
+            Wait(new InputRequest(InputType.INT, endTime, defaultValue?.ToString(), isOneInput), tickAction);
             return _lastInputNumber;
         }
 
-        public async Task<string> WaitStringAsync(bool isOneInput = false)
+        public string WaitString(bool isOneInput = false)
         {
-            await WaitAsync(new InputRequest(InputType.STR, isOneInput));
+            Wait(new InputRequest(InputType.STR, isOneInput));
             return _lastInputValue;
         }
 
-        public async Task<string> WaitStringAsync(long endTime, string defaultValue = null, bool isOneInput = false,
+        public string WaitString(long endTime, string defaultValue = null, bool isOneInput = false,
             Action<long> tickAction = null)
         {
-            await WaitAsync(new InputRequest(InputType.STR, endTime, defaultValue, isOneInput), tickAction);
+            Wait(new InputRequest(InputType.STR, endTime, defaultValue, isOneInput), tickAction);
             return _lastInputValue;
         }
 
-        public async Task WaitAsync(InputRequest req, Action<long> tickAction = null)
+        public void Wait(InputRequest req, Action<long> tickAction = null)
         {
-            var target = req.EndTime + CurrentTime;
+            long target = req.EndTime + CurrentTime;
             currentInputReq = req;
 
             while (true)
             {
-                await Task.Delay(WAIT_TIMEOUT);
+                Task.Delay(WAIT_TIMEOUT).Wait();
 
                 if (!IsWaiting) break;
 
