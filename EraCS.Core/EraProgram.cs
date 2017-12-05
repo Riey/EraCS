@@ -17,6 +17,8 @@ namespace EraCS
     public abstract class EraProgram<TConsole, TVariable>
         where TConsole : IEraConsole
     {
+        protected readonly object inputLock = new object();
+
         protected readonly Stopwatch timer = new Stopwatch();
         protected InputRequest currentInputReq;
 
@@ -51,27 +53,30 @@ namespace EraCS
         {
             if (!IsWaiting) return;
 
-            if (currentInputReq.IsOneInput) value = value?[0].ToString();
-
-            switch (currentInputReq.InputType)
+            lock (inputLock)
             {
-                case InputType.ANYKEY:
-                    _lastInputValue = null;
-                    break;
-                case InputType.INT:
-                    if (!int.TryParse(value, out var num)) return;
-                    _lastInputValue = value;
-                    _lastInputNumber = num;
-                    break;
-                case InputType.STR:
-                    if (value == null) return;
-                    _lastInputValue = value;
-                    break;
-                default:
-                    throw new ArgumentException("Invalid InputType");
-            }
+                if (currentInputReq.IsOneInput) value = value?[0].ToString();
 
-            currentInputReq = null;
+                switch (currentInputReq.InputType)
+                {
+                    case InputType.ANYKEY:
+                        _lastInputValue = null;
+                        break;
+                    case InputType.INT:
+                        if (!int.TryParse(value, out var num)) return;
+                        _lastInputValue = value;
+                        _lastInputNumber = num;
+                        break;
+                    case InputType.STR:
+                        if (value == null) return;
+                        _lastInputValue = value;
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid InputType");
+                }
+
+                currentInputReq = null;
+            }
         }
 
         public void Start()
@@ -167,7 +172,11 @@ namespace EraCS
         public void Wait(InputRequest req, Action<long> tickAction = null)
         {
             long target = req.EndTime + CurrentTime;
-            currentInputReq = req;
+
+            lock (inputLock)
+            {
+                currentInputReq = req;
+            }
 
             while (true)
             {
