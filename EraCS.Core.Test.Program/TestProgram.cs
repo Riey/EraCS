@@ -45,13 +45,13 @@ namespace EraCS.Core.Test.Program
             Console.PrintLine($"Current time: {VarData.Time}");
         }
 
-        protected override async void RunScriptAsync()
+        protected override void RunScript()
         {
             Console.Alignment = LineAlignment.Left;
             SystemTitle();
 
             Console.PrintLine("Wait anykey test");
-            await WaitAnyKeyAsync();
+            WaitAnyKey();
             Console.NewLine();
 
             Console.Alignment = LineAlignment.Center;
@@ -61,7 +61,7 @@ namespace EraCS.Core.Test.Program
 
             Console.PrintLine("Please input");
 
-            string input = await WaitStringAsync();
+            string input = WaitString();
 
             Console.DeleteLine(2);
             Console.NewLine();

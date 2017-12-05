@@ -29,8 +29,11 @@ namespace EraCS.UI.EraConsole
         public event Action Clicked;
         public event Action DrawRequested;
 
+        public object DataLock { get; } = new object();
 
-        public IList<IConsoleLine> Lines { get; }
+        public bool NeedRedraw { get; protected set; }
+
+        protected IList<IConsoleLine> Lines { get; }
         
         private ConsoleLine LastLine { get; set; }
 
@@ -108,8 +111,11 @@ namespace EraCS.UI.EraConsole
 
         private void LinesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            Height = Lines.Sum(l => l.Height);
-            OnDrawRequested();
+            lock (DataLock)
+            {
+                Height = Lines.Sum(l => l.Height);
+                NeedRedraw = true;
+            }
         }
 
         protected void AddBlankLine()
@@ -120,19 +126,24 @@ namespace EraCS.UI.EraConsole
 
         protected void AddPart(IConsoleLinePart part)
         {
-            if (LastLineIsTemporary)
+            lock (DataLock)
             {
-                Lines.RemoveAt(Lines.Count - 1);
-                LastLineIsTemporary = false;
-            }
+                if (LastLineIsTemporary)
+                {
+                    Lines.RemoveAt(Lines.Count - 1);
+                    LastLineIsTemporary = false;
+                }
 
-            if (_blankLineFlag || Lines.Count == 0)
-            {
-                AddBlankLine();
-                _blankLineFlag = false;
-            }
+                if (_blankLineFlag || Lines.Count == 0)
+                {
+                    AddBlankLine();
+                    _blankLineFlag = false;
+                }
 
-            LastLine.Parts.Add(part);
+                LastLine.Parts.Add(part);
+
+                NeedRedraw = true;
+            }
         }
 
         public void Print(string str) => AddPart(new ConsoleStringPart(ConsoleTextColor, str, TextSize, Typeface));
@@ -191,14 +202,19 @@ namespace EraCS.UI.EraConsole
 
             float y = 0;
 
-            foreach (var line in Lines)
+            lock (DataLock)
             {
-                line.DrawTo(c, y);
-                y += line.Height;
+                foreach (var line in Lines)
+                {
+                    line.DrawTo(c, y);
+                    y += line.Height;
+                }
+
+                NeedRedraw = false;
             }
         }
 
-        protected virtual void OnDrawRequested()
+        public virtual void OnDrawRequested()
         {
             DrawRequested?.Invoke();
         }
@@ -225,34 +241,43 @@ namespace EraCS.UI.EraConsole
             if(x < 0) throw new ArgumentOutOfRangeException(nameof(x));
             if(y < 0) throw new ArgumentOutOfRangeException(nameof(y));
 
-            var part = GetPart(x, y);
-
-            if (_lastCursorOnPart != part)
+            lock (DataLock)
             {
-                _lastCursorOnPart?.OnCursorExited();
-                part?.OnCursorEntered();
-                _lastCursorOnPart = part;
-            }
-            else
-            {
-                part?.OnCursorOver(x, y);
-            }
+                var part = GetPart(x, y);
 
-            OnDrawRequested();
+                if (_lastCursorOnPart != part)
+                {
+                    _lastCursorOnPart?.OnCursorExited();
+                    part?.OnCursorEntered();
+                    _lastCursorOnPart = part;
+                }
+                else
+                {
+                    part?.OnCursorOver(x, y);
+                }
+
+                NeedRedraw = true;
+            }
         }
 
         public void OnClicked(float x, float y)
         {
-            OnCursorMoved(x, y);
+            lock (DataLock)
+            {
+                OnCursorMoved(x, y);
 
-            _lastCursorOnPart?.OnClicked(x, y);
-            Clicked?.Invoke();
-            OnDrawRequested();
+                _lastCursorOnPart?.OnClicked(x, y);
+                Clicked?.Invoke();
+                NeedRedraw = true;
+            }
         }
 
         public void OnTextEntered(string value)
         {
-            TextEntered?.Invoke(value);
+            lock (DataLock)
+            {
+                TextEntered?.Invoke(value);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

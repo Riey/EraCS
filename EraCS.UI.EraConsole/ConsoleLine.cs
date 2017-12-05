@@ -42,9 +42,9 @@ namespace EraCS.UI.EraConsole
             float x = 0;
 
             if (alignment == LineAlignment.Center)
-                x = (canvas.DeviceClipBounds.Width - width) / 2;
+                x = (canvas.LocalClipBounds.Width - width) / 2;
             else if (alignment == LineAlignment.Right)
-                x = canvas.DeviceClipBounds.Width - width;
+                x = canvas.LocalClipBounds.Width - width;
 
             _prevX = x;
 
