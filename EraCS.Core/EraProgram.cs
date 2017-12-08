@@ -23,7 +23,7 @@ namespace EraCS
         protected readonly Stopwatch timer = new Stopwatch();
         protected InputRequest currentInputReq;
 
-        protected Task ScriptTask { get; private set; }
+        protected Task<Exception> ScriptTask { get; private set; }
 
         public TConsole Console { get; }
         public TVariable VarData { get; private set; }
@@ -49,7 +49,7 @@ namespace EraCS
             console.Clicked += () => OnTextEntered(null);
         }
         
-        protected abstract void RunScript();
+        protected abstract Exception RunScript();
 
         private string _lastInputValue;
         private int _lastInputNumber;
@@ -84,16 +84,16 @@ namespace EraCS
             }
         }
 
-        public void Start()
+        public async Task<Exception> Start()
         {
             timer.Start();
 
             ScriptTask = Task.Factory.StartNew(RunScript, TaskCreationOptions.LongRunning);
 
-            ManageScriptAsync();
+            return await ManageScriptAsync();
         }
 
-        private async void ManageScriptAsync()
+        private async Task<Exception> ManageScriptAsync()
         {
             while(!ScriptTask.IsCompleted)
             {
@@ -110,9 +110,13 @@ namespace EraCS
                 Console.OnDrawRequested();
             }
 
+            var exception = ScriptTask.Result;
+
             ScriptTask = null;
             timer.Stop();
             timer.Reset();
+
+            return exception;
         }
 
         protected virtual JsonSerializerSettings SerializerSettings { get; } =

@@ -45,7 +45,7 @@ namespace EraCS.Core.Test.Program
             Console.PrintLine($"Current time: {VarData.Time}");
         }
 
-        protected override void RunScript()
+        protected override Exception RunScript()
         {
             Console.Alignment = LineAlignment.Left;
             SystemTitle();
@@ -67,6 +67,8 @@ namespace EraCS.Core.Test.Program
             Console.NewLine();
             Console.NewLine();
             Console.PrintLine($"You wrote: {input}");
+
+            return null;
         }
     }
 }
