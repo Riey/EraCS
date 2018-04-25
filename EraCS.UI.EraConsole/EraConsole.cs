@@ -29,13 +29,16 @@ namespace EraCS.UI.EraConsole
         public event Action Clicked;
         public event Action DrawRequested;
 
-        public object DataLock { get; } = new object();
+        protected object DataLock { get; } = new object();
 
         public bool NeedRedraw { get; protected set; }
 
+        /// <summary>
+        /// Need lock(DataLock) to change thread-safe
+        /// </summary>
         protected IList<IConsoleLine> Lines { get; }
         
-        private ConsoleLine LastLine { get; set; }
+        protected ConsoleLine LastLine { get; private set; }
 
         public LineAlignment Alignment { get; set; } = LineAlignment.Left;
 
@@ -58,7 +61,7 @@ namespace EraCS.UI.EraConsole
             get => _consoleTextColor;
             set
             {
-                if (value.Equals(_consoleTextColor)) return;
+                if (value == _consoleTextColor) return;
                 _consoleTextColor = value;
                 OnPropertyChanged();
             }
@@ -121,7 +124,11 @@ namespace EraCS.UI.EraConsole
         protected void AddBlankLine()
         {
             LastLine = new ConsoleLine(Alignment, LineHeight);
-            Lines.Add(LastLine);
+
+            lock (DataLock)
+            {
+                Lines.Add(LastLine);
+            }
         }
 
         protected void AddPart(IConsoleLinePart part)
@@ -157,37 +164,46 @@ namespace EraCS.UI.EraConsole
         public void PrintButton(string text, string value)
         {
             var btn = new ConsoleButtonPart(text, TextSize, Typeface, value, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
-            _activeButtons.Add(btn);
+            lock (DataLock)
+            {
+                _activeButtons.Add(btn); 
+            }
             AddPart(btn);
         }
 
         public void NewLine()
         {
-            if (LastLineIsTemporary)
+            lock (DataLock)
             {
-                Lines.RemoveAt(Lines.Count - 1);
-                LastLineIsTemporary = false;
-            }
+                if (LastLineIsTemporary)
+                {
+                    Lines.RemoveAt(Lines.Count - 1);
+                    LastLineIsTemporary = false;
+                }
 
-            if (_blankLineFlag)
-            {
-                AddBlankLine();
-                _blankLineFlag = false;
-            }
-            else
-            {
-                _blankLineFlag = true;
+                if (_blankLineFlag)
+                {
+                    AddBlankLine();
+                    _blankLineFlag = false;
+                }
+                else
+                {
+                    _blankLineFlag = true;
+                } 
             }
         }
 
         public void DeleteLine(int count)
         {
-            for (int i = 0; i < count; i++)
+            lock (DataLock)
             {
-                Lines.RemoveAt(Lines.Count - 1);
-            }
+                for (int i = 0; i < count; i++)
+                {
+                    Lines.RemoveAt(Lines.Count - 1);
+                }
 
-            LastLineIsTemporary = false;
+                LastLineIsTemporary = false; 
+            }
         }
 
         public void DeActiveButtons()
@@ -219,7 +235,13 @@ namespace EraCS.UI.EraConsole
             DrawRequested?.Invoke();
         }
 
-        private IConsoleLinePart GetPart(float x, float y)
+        /// <summary>
+        /// Need lock DataLock
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private IConsoleLinePart GetPartUnsafe(float x, float y)
         {
             foreach (var line in Lines)
             {
@@ -243,7 +265,7 @@ namespace EraCS.UI.EraConsole
 
             lock (DataLock)
             {
-                var part = GetPart(x, y);
+                var part = GetPartUnsafe(x, y);
 
                 if (_lastCursorOnPart != part)
                 {
