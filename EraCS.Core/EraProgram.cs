@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace EraCS
 {
@@ -15,7 +12,7 @@ namespace EraCS
         Waiting
     }
 
-    public abstract class EraProgram<TConsole, TVariable>
+    public abstract class EraProgram<TConsole>
         where TConsole : IEraConsole
     {
         protected readonly object inputLock = new object();
@@ -23,10 +20,9 @@ namespace EraCS
         protected readonly Stopwatch timer = new Stopwatch();
         protected InputRequest currentInputReq;
 
-        protected Task<Exception> ScriptTask { get; private set; }
+        protected Task ScriptTask { get; private set; }
 
         public TConsole Console { get; }
-        public TVariable VarData { get; private set; }
 
         public ProgramStatus Status =>
             ScriptTask == null
@@ -40,10 +36,9 @@ namespace EraCS
         public bool IsWaiting => currentInputReq != null;
         public long CurrentTime => timer.ElapsedMilliseconds;
 
-        protected EraProgram(TConsole console, TVariable varData)
+        protected EraProgram(TConsole console)
         {
             Console = console;
-            VarData = varData;
 
             console.TextEntered += OnTextEntered;
             console.Clicked += () => OnTextEntered(null);
@@ -84,16 +79,16 @@ namespace EraCS
             }
         }
 
-        public async Task<Exception> Start()
+        public async Task Start()
         {
             timer.Start();
 
             ScriptTask = Task.Factory.StartNew(RunScript, TaskCreationOptions.LongRunning);
 
-            return await ManageScriptAsync();
+            await ManageScriptAsync();
         }
 
-        private async Task<Exception> ManageScriptAsync()
+        private async Task ManageScriptAsync()
         {
             while(!ScriptTask.IsCompleted)
             {
@@ -110,43 +105,9 @@ namespace EraCS
                 Console.OnDrawRequested();
             }
 
-            var exception = ScriptTask.Result;
-
             ScriptTask = null;
             timer.Stop();
             timer.Reset();
-
-            return exception;
-        }
-
-        protected virtual JsonSerializerSettings SerializerSettings { get; } =
-            new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Include,
-                ObjectCreationHandling = ObjectCreationHandling.Auto
-            };
-
-        public void Save(Stream output, bool leaveOpen)
-        {
-            using (var writer = new StreamWriter(output, Encoding.UTF8, 8192, leaveOpen))
-                writer.Write(Serialize());
-        }
-
-        public string Serialize()
-        {
-            return JsonConvert.SerializeObject(VarData, Formatting.Indented, SerializerSettings);
-        }
-
-        public void Load(Stream input, bool leaveOpen)
-        {
-            using (var reader = new StreamReader(input, Encoding.UTF8, leaveOpen))
-                DeSerialize(reader.ReadToEnd());
-        }
-
-        public void DeSerialize(string savString)
-        {
-            VarData = JsonConvert.DeserializeObject<TVariable>(savString, SerializerSettings);
         }
 
         protected const int WAIT_TIMEOUT = 50;

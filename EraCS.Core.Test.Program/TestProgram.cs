@@ -4,9 +4,11 @@ using EraCS.UI.EraConsole;
 namespace EraCS.Core.Test.Program
 {
 
-    public class TestProgram : EraProgram<EraConsole, TestVariableData>
+    public class TestProgram : EraProgram<EraConsole>
     {
-        public TestProgram() : base(new EraConsole(), new TestVariableData())
+        public TestVariableData VarData { get; private set; } = new TestVariableData();
+
+        public TestProgram() : base(new EraConsole())
         {
             Console.SetBackColor(KnownColor.Black);
             Console.SetHighlightColor(KnownColor.Yellow);
