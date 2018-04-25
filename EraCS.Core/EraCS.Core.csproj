@@ -4,16 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>EraCS</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.3.2.0</AssemblyVersion>
-    <FileVersion>1.3.1.0</FileVersion>
+    <AssemblyVersion>1.3.3.0</AssemblyVersion>
+    <FileVersion>1.3.3.0</FileVersion>
     <PackageProjectUrl>https://github.com/Riey/EraCS</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/Riey/EraCS/blob/master/LICENSE</PackageLicenseUrl>
     <Description>Era runtime with C#</Description>
     <Authors>Riey</Authors>
     <Company />
-    <Version>1.3.2</Version>
+    <Version>1.3.3</Version>
     <PackageId>Riey.EraCS.Core</PackageId>
-    <Copyright>Copyright 2017</Copyright>
+    <Copyright>Copyright 2018</Copyright>
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
 
