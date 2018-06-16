@@ -44,7 +44,7 @@ namespace EraCS
             console.Clicked += () => OnTextEntered(null);
         }
         
-        protected abstract Exception RunScript();
+        protected abstract void RunScript();
 
         private string _lastInputValue;
         private int _lastInputNumber;
