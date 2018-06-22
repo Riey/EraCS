@@ -161,9 +161,9 @@ namespace EraCS.UI.EraConsole
             NewLine();
         }
 
-        public void PrintButton(string text, string value)
+        public void PrintButton(string buttonValue, string buttonText)
         {
-            var btn = new ConsoleButtonPart(text, TextSize, Typeface, value, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
+            var btn = new ConsoleButtonPart(buttonText, TextSize, Typeface, buttonValue, ConsoleTextColor, ConsoleHighlightColor, OnTextEntered);
             lock (DataLock)
             {
                 _activeButtons.Add(btn); 

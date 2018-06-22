@@ -46,8 +46,8 @@ namespace EraCS
         
         protected abstract void RunScript();
 
-        private string _lastInputValue;
-        private int _lastInputNumber;
+        protected string LastInputValue { get; private set; }
+        protected int LastInputNumber { get; private set; }
 
         public void OnTextEntered(string value)
         {
@@ -60,16 +60,16 @@ namespace EraCS
                 switch (currentInputReq.InputType)
                 {
                     case InputType.ANYKEY:
-                        _lastInputValue = null;
+                        LastInputValue = null;
                         break;
                     case InputType.INT:
                         if (!int.TryParse(value, out var num)) return;
-                        _lastInputValue = value;
-                        _lastInputNumber = num;
+                        LastInputValue = value;
+                        LastInputNumber = num;
                         break;
                     case InputType.STR:
                         if (value == null) return;
-                        _lastInputValue = value;
+                        LastInputValue = value;
                         break;
                     default:
                         throw new ArgumentException("Invalid InputType");
@@ -120,30 +120,30 @@ namespace EraCS
         public int WaitNumber(bool isOneInput = false)
         {
             Wait(new InputRequest(InputType.INT, isOneInput));
-            return _lastInputNumber;
+            return LastInputNumber;
         }
 
         public int WaitNumber(long endTime, int? defaultValue = null, bool isOneInput = false,
             Action<long> tickAction = null)
         {
             Wait(new InputRequest(InputType.INT, endTime, defaultValue?.ToString(), isOneInput), tickAction);
-            return _lastInputNumber;
+            return LastInputNumber;
         }
 
         public string WaitString(bool isOneInput = false)
         {
             Wait(new InputRequest(InputType.STR, isOneInput));
-            return _lastInputValue;
+            return LastInputValue;
         }
 
         public string WaitString(long endTime, string defaultValue = null, bool isOneInput = false,
             Action<long> tickAction = null)
         {
             Wait(new InputRequest(InputType.STR, endTime, defaultValue, isOneInput), tickAction);
-            return _lastInputValue;
+            return LastInputValue;
         }
 
-        public void Wait(InputRequest req, Action<long> tickAction = null)
+        protected void Wait(InputRequest req, Action<long> tickAction = null)
         {
             long target = req.EndTime + CurrentTime;
 

@@ -57,8 +57,7 @@ namespace EraCS.Core.Test.Program
             Console.NewLine();
 
             Console.Alignment = LineAlignment.Center;
-
-            Console.PrintButton("Click Me!!", "ABC");
+            Console.PrintButton("ABC", "Click Me!!!");
             Console.NewLine();
 
             Console.PrintLine("Please input");
