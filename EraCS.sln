@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{38A39412-E3B9-434E-93EB-0F1387247902}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraCS.Core.Test.Program", "EraCS.Core.Test.Program\EraCS.Core.Test.Program.csproj", "{06EC4DF0-3027-44F5-BA2A-7E4EC3E0AEFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EraCS.Core.Test.Program", "EraCS.Core.Test.Program\EraCS.Core.Test.Program.csproj", "{06EC4DF0-3027-44F5-BA2A-7E4EC3E0AEFD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{395EF0D7-4566-4B8D-827B-462CF61FFD26}"
 EndProject
@@ -15,9 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraCS.UI.FrontEnd.Wpf", "Er
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraCS.UI.FrontEnd.Wpf.Test", "EraCS.UI.FrontEnd.Wpf.Test\EraCS.UI.FrontEnd.Wpf.Test.csproj", "{6979480E-B362-442F-9AF2-6187117F9D08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraCS.Core", "EraCS.Core\EraCS.Core.csproj", "{D5802D09-2A16-4B0C-8B39-780B6209864E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EraCS.Core", "EraCS.Core\EraCS.Core.csproj", "{D5802D09-2A16-4B0C-8B39-780B6209864E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EraCS.UI.EraConsole", "EraCS.UI.EraConsole\EraCS.UI.EraConsole.csproj", "{EF30A55D-7CAF-46F5-9379-F787992BC234}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EraCS.UI.FrontEnd.Android", "EraCS.UI.FrontEnd.Android\EraCS.UI.FrontEnd.Android.csproj", "{E9C13647-811F-48EE-B741-9481F786CE48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,14 @@ Global
 		{EF30A55D-7CAF-46F5-9379-F787992BC234}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EF30A55D-7CAF-46F5-9379-F787992BC234}.Release|x64.ActiveCfg = Release|Any CPU
 		{EF30A55D-7CAF-46F5-9379-F787992BC234}.Release|x64.Build.0 = Release|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Debug|x64.Build.0 = Debug|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Release|x64.ActiveCfg = Release|Any CPU
+		{E9C13647-811F-48EE-B741-9481F786CE48}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,6 +87,7 @@ Global
 		{5BB11C03-3739-46D1-9736-9B70F00E80D0} = {C6786F7D-AA6B-49F5-8AE1-0FDDA3CC333C}
 		{6979480E-B362-442F-9AF2-6187117F9D08} = {38A39412-E3B9-434E-93EB-0F1387247902}
 		{EF30A55D-7CAF-46F5-9379-F787992BC234} = {395EF0D7-4566-4B8D-827B-462CF61FFD26}
+		{E9C13647-811F-48EE-B741-9481F786CE48} = {C6786F7D-AA6B-49F5-8AE1-0FDDA3CC333C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D84263EA-2B0C-437C-A417-74BD77C9B87C}

@@ -79,7 +79,7 @@ namespace EraCS
             }
         }
 
-        public async Task Start()
+        public async void Start()
         {
             timer.Start();
 
