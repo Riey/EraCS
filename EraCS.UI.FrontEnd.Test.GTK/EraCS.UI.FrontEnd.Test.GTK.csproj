@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net471</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup> 
+    <AssemblySearchPaths>$(AssemblySearchPaths);{GAC}</AssemblySearchPaths>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EraCS.UI.FrontEnd\EraCS.UI.FrontEnd.csproj" />
+    <ProjectReference Include="..\EraCS.UI.EraConsole\EraCS.UI.EraConsole.csproj" />
+    <ProjectReference Include="..\EraCS.Core\EraCS.Core.csproj" />
+    <ProjectReference Include="..\EraCS.Core.Test.Program\EraCS.Core.Test.Program.csproj" />
+    <ProjectReference Include="..\EraCS.UI.FrontEnd.Test\EraCS.UI.FrontEnd.Test.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.60.2" />
+    <PackageReference Include="SkiaSharp.Views" Version="1.60.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.2" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.583944" />
+    <PackageReference Include="Xamarin.Forms.Platform.GTK" Version="3.1.0.583944" />
+  </ItemGroup>
+
+</Project>

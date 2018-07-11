@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.60.2" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.583944" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EraCS.UI.EraConsole\EraCS.UI.EraConsole.csproj" />
+    <ProjectReference Include="..\EraCS.Core\EraCS.Core.csproj" />
+  </ItemGroup>
+
+</Project>
