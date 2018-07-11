@@ -17,11 +17,6 @@ namespace EraCS.UI.FrontEnd.Test.GTK
             Gtk.Application.Init();
             Forms.Init();
 
-            GLib.ExceptionManager.UnhandledException += e =>
-            {
-                System.Diagnostics.Debug.WriteLine(e.ExceptionObject.ToString());
-            };
-
             var app = new TestApp();
             var window = new FormsWindow();
 
